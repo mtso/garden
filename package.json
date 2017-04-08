@@ -1,0 +1,14 @@
+{
+  "name": "garden",
+  "version": "1.0.0",
+  "description": "roguelike garden crawler.",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "garden"
+  ],
+  "author": "mtso <mtso@tuta.io>",
+  "license": "ISC"
+}
