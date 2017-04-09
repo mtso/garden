@@ -1,4 +1,4 @@
-const EFFORT = 20;
+const QUALITY = 20;
 
 function generate(size, roomCount) {
   let grid = [];
@@ -10,12 +10,12 @@ function generate(size, roomCount) {
     grid.push(row)
   }
   let rooms = generateRooms(roomCount, size)
-  fillRooms(grid, rooms)
+  fill(grid, rooms)
   console.log(rooms)
   return grid
 }
 
-function fillRooms(map, rooms) {
+function fill(map, rooms) {
   rooms.forEach(room => {
     for (var r = room.origin.y; r < room.origin.y + room.size; r++) {
       for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
@@ -25,22 +25,31 @@ function fillRooms(map, rooms) {
   })
 }
 
-// Generating based on the given count is done on a
-// best effort basis, with the reasoning that if it is
-// taking too many tries to generate a valid room,
-// the existing rooms already cover enough of the map.
 function generateRooms(count, mapSize) {
   let rooms = [];
+  let halls = [];
   let maxSize = Math.floor( (3/70) * mapSize + 6.7 );
   let minSize = Math.floor(maxSize / 2);
-  for (var n = 0; n < count; n++) {
+  rooms.push({
+    origin: {
+      x: randomInt(minSize) + Math.floor(mapSize / 2 - minSize / 2),
+      y: randomInt(minSize) + Math.floor(mapSize / 2 - minSize / 2)
+    },
+    size: randomInt(minSize, maxSize)
+  })
+  for (var n = 1; n < count; n++) {
     var room;
     var attempts = 0;
     try {
       do {
-        room = randomRoom(minSize, maxSize, mapSize)
+        if (rooms.length > 0) {
+          room = randomRoom(minSize, maxSize, mapSize) //, rooms[rooms.length - 1], minSize)
+          console.log(room)
+        } else {
+          room = randomRoom(minSize, maxSize, mapSize)
+        }
         attempts++;
-        if (attempts > EFFORT) {
+        if (attempts > QUALITY) {
           throw `could not generate a valid room in ${QUALITY} attempts`;
         }
       } while (touches(rooms, room))
@@ -52,47 +61,26 @@ function generateRooms(count, mapSize) {
   return rooms;
 }
 
-function randomRoom(min, max, mapSize) {
-  let size = randomInt(min, max)
-  let origin = randomPoint(mapSize - size)
+function longestDirection(fromRoom, mapSize) {
+  [
+    {}
+  ]
+}
+
+function drawLine(from, direction) {
   return {
-    origin: origin,
-    size: size
+    from: from,
+    to: {
+      x: from.x + direction.x,
+      y: from.y + direction.y
+    }
   }
 }
 
-function center(room) {
-  return {
-    x: room.origin.x + Math.floor(room.size / 2),
-    y: room.origin.y + Math.floor(room.size / 2),
-  }
-}
-
-function direction(x, y) {
-  return Math.floor((y - x) / Math.abs(y - x))
-}
-
-// Returns the points that connect a and b orthogonally.
-function connect(a, b) {
-  var points = [];
-  let dx = direction(a.x, b.x)
-  let dy = direction(a.y, b.y)
-  for (var sx = a.x + dx; sx !== b.x; sx += dx) {
-    points.push({x: sx,y: a.y})
-  }
-  for (var sy = points[points.length - 1].y; sy !== b.y; sy += dy) {
-    points.push({x: b.x, y: sy})
-  }
-  return points
-}
-
-// Determines if a target room overlaps or touches
-// any room in an existing room collection.
 function touches(rooms, target) {
   return rooms.some((room) => {
     var isTouching = false;
     var points = [];
-    // Keep a buffer of one on each edge.
     for (var r = target.origin.y-1; r <= target.origin.y+target.size; r++) {
       for (var c = target.origin.x-1; c <= target.origin.x+target.size; c++) {
         points.push({x: c, y: r})
@@ -119,7 +107,19 @@ function randomInt(min, max) {
   }
 }
 
-function randomPoint(size) {
+function randomPoint(size, fromRoom, dist, roomSize) {
+  if (fromRoom) {
+    return {
+      x: randomInt(
+        Math.max(fromRoom.origin.x - dist - roomSize, 0),
+        Math.min(size, fromRoom.origin.x + fromRoom.size + dist)
+      ),
+      y: randomInt(
+        Math.max(fromRoom.origin.y - dist - roomSize, 0),
+        Math.min(size, fromRoom.origin.y + fromRoom.size + dist)
+      ),
+    }
+  }
   return {
     x: randomInt(size),
     y: randomInt(size),
@@ -130,6 +130,23 @@ function distance(a, b) {
   let dx = b.x - a.x;
   let dy = b.y - a.y;
   return Math.sqrt(dx*dx + dy*dy)
+}
+
+function randomRoom(min, max, mapSize, fromRoom, distance) {
+  if (fromRoom) {
+    let size = randomInt(min, max)
+    let origin = randomPoint(mapSize - size, fromRoom, distance, size)
+    return {
+      origin: origin,
+      size: size
+    }
+  }
+  let size = randomInt(min, max)
+  let origin = randomPoint(mapSize - size)
+  return {
+    origin: origin,
+    size: size
+  }
 }
 
 module.exports = {
