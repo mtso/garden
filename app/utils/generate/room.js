@@ -1,29 +1,8 @@
-const EFFORT = 20;
-
-function generate(size, roomCount) {
-  let grid = [];
-  for (var r = 0; r < size; r++) {
-    let row = []
-    for (var c = 0; c < size; c++) {
-      row.push('.')
-    }
-    grid.push(row)
-  }
-  let rooms = generateRooms(roomCount, size)
-  fillRooms(grid, rooms)
-  console.log(rooms)
-  return grid
-}
-
-function fillRooms(map, rooms) {
-  rooms.forEach(room => {
-    for (var r = room.origin.y; r < room.origin.y + room.size; r++) {
-      for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
-        map[r][c] = '█'
-      }
-    }
-  })
-}
+import { randomInt, randomPoint } from './random'
+import { EFFORT } from '../../config'
+/*                     *
+ *   ROOM GENERATION   *
+ *                     */
 
 // Generating based on the given count is done on a
 // best effort basis, with the reasoning that if it is
@@ -41,7 +20,7 @@ function generateRooms(count, mapSize) {
         room = randomRoom(minSize, maxSize, mapSize)
         attempts++;
         if (attempts > EFFORT) {
-          throw `could not generate a valid room in ${QUALITY} attempts`;
+          throw `could not generate a valid room in ${EFFORT} attempts`;
         }
       } while (touches(rooms, room))
       rooms.push(room)
@@ -50,6 +29,13 @@ function generateRooms(count, mapSize) {
     }
   }
   return rooms;
+}
+
+function center(room) {
+  return {
+    x: room.origin.x + Math.floor(room.size / 2),
+    y: room.origin.y + Math.floor(room.size / 2),
+  }
 }
 
 function randomRoom(min, max, mapSize) {
@@ -61,38 +47,13 @@ function randomRoom(min, max, mapSize) {
   }
 }
 
-function center(room) {
-  return {
-    x: room.origin.x + Math.floor(room.size / 2),
-    y: room.origin.y + Math.floor(room.size / 2),
-  }
-}
-
-function direction(x, y) {
-  return Math.floor((y - x) / Math.abs(y - x))
-}
-
-// Returns the points that connect a and b orthogonally.
-function connect(a, b) {
-  var points = [];
-  let dx = direction(a.x, b.x)
-  let dy = direction(a.y, b.y)
-  for (var sx = a.x + dx; sx !== b.x; sx += dx) {
-    points.push({x: sx,y: a.y})
-  }
-  for (var sy = points[points.length - 1].y; sy !== b.y; sy += dy) {
-    points.push({x: b.x, y: sy})
-  }
-  return points
-}
-
 // Determines if a target room overlaps or touches
 // any room in an existing room collection.
 function touches(rooms, target) {
   return rooms.some((room) => {
     var isTouching = false;
     var points = [];
-    // Keep a buffer of one on each edge.
+    // Keep a buffer of 1 on each edge.
     for (var r = target.origin.y-1; r <= target.origin.y+target.size; r++) {
       for (var c = target.origin.x-1; c <= target.origin.x+target.size; c++) {
         points.push({x: c, y: r})
@@ -111,27 +72,28 @@ function containsPoint(room, point) {
   return xOverlap && yOverlap
 }
 
-function randomInt(min, max) {
-  if (max) {
-    return Math.floor(Math.random() * (max - min)) + min
+function roomInset(room, offset) {
+  if (offset > room.size / 2) {
+    return {
+      origin: center(room),
+      size: 1
+    }
   } else {
-    return Math.floor(Math.random() * min)
+    return {
+      origin: {
+        x: room.origin.x + offset,
+        y: room.origin.y + offset,
+      },
+      size: room.size - (offset * 2)
+    }
   }
-}
-
-function randomPoint(size) {
-  return {
-    x: randomInt(size),
-    y: randomInt(size),
-  }
-}
-
-function distance(a, b) {
-  let dx = b.x - a.x;
-  let dy = b.y - a.y;
-  return Math.sqrt(dx*dx + dy*dy)
 }
 
 module.exports = {
-  generate,
+  center,
+  randomRoom,
+  generateRooms,
+  touches,
+  containsPoint,
+  roomInset,
 }

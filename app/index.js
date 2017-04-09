@@ -7,16 +7,58 @@ const LEFT = 37
 const RIGHT = 39
 const UP = 38
 
-import {generate} from './generate';
+import {generate} from './utils/generate';
+import st from './assets/statues';
 
-let grid = generate(30, 12)
+let mapSize = 30
+// let grid = generate(14, 3)
+let grid = generate(mapSize, 12)
 // let grid = generate(70, 34)
+// let grid = generate(200, 64)
 
 class Grid extends Component {
   render() {
-    let grid = this.props.grid.map(row => {
+    var i = 0;
+    let grid = this.props.grid.map((row) => {
       return row.join(' ')
     }).join('\n')
+    grid = grid.split('')
+
+    console.log(this.props.grid.statues)
+    this.props.grid.statues.forEach(statue => {
+      statue.string.split('').forEach((c, i) => {
+        let x = statue.origin.x * 2 + i
+        let y = statue.origin.y * (mapSize * 2)
+        if (grid[y + x] === ' ') {
+          grid[y + x] = <span style={{fontFamily: '"Monaco", "Consolas", monospace', color: 'lightGray'}}>{c}</span>
+        }
+      })
+    })
+
+    // let statue = st[1].split('')
+    // statue.forEach((char, i) => {
+    //   // console.log('text is:', JSON.stringify(grid[i+330]))
+    //   if (grid[i+330] === ' ') {
+    //     grid[i+330] = <span style={{fontFamily: '"Monaco", "Consolas", monospace', color: 'lightGray'}}>{char}</span>
+    //   }
+    // })
+    grid = grid.map(g => {
+      return <span style={{fontFamily: '"Monaco", "Consolas", monospace'}}>{g}</span>
+    })
+    // let grid = this.props.grid.reduce((g, row, r) => {
+    //   return g.concat( row.map((cell, c) => {
+    //     // console.log(cell)
+    //     return <span key={`${++i}`}></span>
+    //   }) )
+    //   // return {r}<span>{'\n'}</span>
+    //   // return row.join(' ')
+    // })//.join(<span>\n</span>)
+    // statue.forEach((char, i) => {
+    //   // console.log('text is:', JSON.stringify(grid[i+330]))
+    //   if (grid[i+330].innerText !== ' ') {
+    //     grid[i+330] = <span style={{fontFamily: '"Monaco", "Consolas", monospace'}}>{char}</span>
+    //   }
+    // })
     return (
       <pre style={{fontFamily: '"Monaco", "Consolas", monospace'}}>{grid}</pre>
     )
@@ -58,8 +100,3 @@ class App extends Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
-
-// window.addEventListener('keydown', (event) => {
-//   console.log(event.keyCode)
-//   app.move(event.keyCode)
-// })
