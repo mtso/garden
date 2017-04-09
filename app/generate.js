@@ -7,7 +7,7 @@ function generate(size, roomCount) {
     }
     grid.push(row)
   }
-  let rooms = generateRooms(roomCount)
+  let rooms = generateRooms(roomCount, size)
   rooms.forEach((room) => {
     for (var r = room.origin.y; r < room.origin.y + room.size; r++) {
       for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
@@ -19,14 +19,16 @@ function generate(size, roomCount) {
   return grid
 }
 
-function generateRooms(count) {
+function generateRooms(count, mapSize) {
   let rooms = [];
+  let maxSize = Math.floor(mapSize / 4);
+  let minSize = Math.floor(maxSize / 2);
   for (var n = 0; n < count; n++) {
     var room;
     var attempts = 0;
     try {
       do {
-        room = randomRoom(3, 10, size)
+        room = randomRoom(minSize, maxSize, mapSize)
         attempts++;
         if (attempts > 10) {
           throw 'could not generate a valid room in 10 attempts';
@@ -44,12 +46,11 @@ function touches(rooms, target) {
   return rooms.some((room) => {
     var isTouching = false;
     var points = [];
-    for (var r = target.origin.y; r <= target.origin.y + target.size; r++) {
-      for (var c = target.origin.x; c <= target.origin.x + target.size; c++) {
+    for (var r = target.origin.y-1; r <= target.origin.y+target.size; r++) {
+      for (var c = target.origin.x-1; c <= target.origin.x+target.size; c++) {
         points.push({x: c, y: r})
       }
     }
-    console.log(points)
     return points.some((point) => containsPoint(room, point))
   })
 }

@@ -9,7 +9,7 @@ const UP = 38
 
 import {generate} from './generate';
 
-let grid = generate(10, 3)
+let grid = generate(20, 9)
 
 class Grid extends Component {
   render() {
