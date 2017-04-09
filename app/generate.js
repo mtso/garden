@@ -1,29 +1,47 @@
-const EFFORT = 20;
+const EFFORT = 50;
 
 function generate(size, roomCount) {
   let grid = [];
   for (var r = 0; r < size; r++) {
     let row = []
     for (var c = 0; c < size; c++) {
-      row.push('.')
+      row.push(' ')
     }
     grid.push(row)
   }
   let rooms = generateRooms(roomCount, size)
   fillRooms(grid, rooms)
+  let halls = span(rooms).reduce((acc, edge) => {
+    return acc.concat(connect(edge.from, edge.to))
+  }, [])
+  fillHalls(grid, halls)
   console.log(rooms)
   return grid
 }
 
 function fillRooms(map, rooms) {
   rooms.forEach(room => {
-    for (var r = room.origin.y; r < room.origin.y + room.size; r++) {
+    for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
+      map[room.origin.y][c] = 'I'
+      map[room.origin.y + room.size - 1][c] = 'I'
+    }
+    for (var r = room.origin.y + 1; r < room.origin.y + room.size - 1; r++) {
       for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
-        map[r][c] = '█'
+        map[r][c] = '.'
       }
     }
   })
 }
+
+function fillHalls(map, halls) {
+  halls.forEach(hall => {
+    map[hall.y][hall.x] = '.'
+  })
+}
+
+/*                     *
+ *   ROOM GENERATION   *
+ *                     */
 
 // Generating based on the given count is done on a
 // best effort basis, with the reasoning that if it is
@@ -41,7 +59,7 @@ function generateRooms(count, mapSize) {
         room = randomRoom(minSize, maxSize, mapSize)
         attempts++;
         if (attempts > EFFORT) {
-          throw `could not generate a valid room in ${QUALITY} attempts`;
+          throw `could not generate a valid room in ${EFFORT} attempts`;
         }
       } while (touches(rooms, room))
       rooms.push(room)
@@ -59,31 +77,6 @@ function randomRoom(min, max, mapSize) {
     origin: origin,
     size: size
   }
-}
-
-function center(room) {
-  return {
-    x: room.origin.x + Math.floor(room.size / 2),
-    y: room.origin.y + Math.floor(room.size / 2),
-  }
-}
-
-function direction(x, y) {
-  return Math.floor((y - x) / Math.abs(y - x))
-}
-
-// Returns the points that connect a and b orthogonally.
-function connect(a, b) {
-  var points = [];
-  let dx = direction(a.x, b.x)
-  let dy = direction(a.y, b.y)
-  for (var sx = a.x + dx; sx !== b.x; sx += dx) {
-    points.push({x: sx,y: a.y})
-  }
-  for (var sy = points[points.length - 1].y; sy !== b.y; sy += dy) {
-    points.push({x: b.x, y: sy})
-  }
-  return points
 }
 
 // Determines if a target room overlaps or touches
@@ -119,6 +112,14 @@ function randomInt(min, max) {
   }
 }
 
+// function randomNormal() {
+//   return (gaussian() + Math.PI) / (Math.PI * 2)
+// }
+//
+// function gaussian() {
+//   return Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
+// }
+
 function randomPoint(size) {
   return {
     x: randomInt(size),
@@ -130,6 +131,71 @@ function distance(a, b) {
   let dx = b.x - a.x;
   let dy = b.y - a.y;
   return Math.sqrt(dx*dx + dy*dy)
+}
+
+/*                      *
+ *  HALLWAY GENERATION  *
+ *                      */
+
+function span(rooms) {
+  if (rooms.length < 2) {
+    return []
+  }
+  let points = rooms.map(center)
+  let tree = [];
+  let edges = [];
+  // pop point into tree
+  // calculate closest nextPoint from any point in tree
+  // add nextPoint and the closeset into edges collection
+  //   and add nextPoint into tree
+  //   and delete nextPoint from points
+  tree.push(points.pop())
+  while (points.length > 0) {
+    var closestEdge = {from: tree[0], to: points[0]};
+    var closestDistance = distance(tree[0], points[0]);
+    var closestNextIndex = 0;
+    points.forEach((point, index) => {
+      tree.forEach(node => {
+        console.log(node, point)
+        if (distance(node, point) < closestDistance) {
+          closestEdge = {from: node, to: point}
+          closestNextIndex = index;
+          closestDistance = distance(node, point)
+        }
+      })
+    })
+    edges.push(closestEdge)
+    tree.push(points[closestNextIndex])
+    console.log(points.length)
+    points.splice(closestNextIndex, 1)
+  }
+  return edges;
+}
+
+function center(room) {
+  return {
+    x: room.origin.x + Math.floor(room.size / 2),
+    y: room.origin.y + Math.floor(room.size / 2),
+  }
+}
+
+function direction(x, y) {
+  return Math.floor((y - x) / Math.abs(y - x))
+}
+
+// Returns the points that connect a and b orthogonally.
+function connect(a, b) {
+  var points = [];
+  points.push({x: a.x, y: a.y})
+  let dx = direction(a.x, b.x)
+  let dy = direction(a.y, b.y)
+  for (var sx = a.x; sx !== b.x; sx += dx) {
+    points.push({x: sx, y: a.y})
+  }
+  for (var sy = points[points.length - 1].y; sy !== b.y; sy += dy) {
+    points.push({x: b.x, y: sy})
+  }
+  return points
 }
 
 module.exports = {
