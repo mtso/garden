@@ -1,3 +1,5 @@
+const QUALITY = 20;
+
 function generate(size, roomCount) {
   let grid = [];
   for (var r = 0; r < size; r++) {
@@ -8,30 +10,47 @@ function generate(size, roomCount) {
     grid.push(row)
   }
   let rooms = generateRooms(roomCount, size)
-  rooms.forEach((room) => {
-    for (var r = room.origin.y; r < room.origin.y + room.size; r++) {
-      for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
-        grid[r][c] = '█'
-      }
-    }
-  })
+  fill(grid, rooms)
   console.log(rooms)
   return grid
 }
 
+function fill(map, rooms) {
+  rooms.forEach(room => {
+    for (var r = room.origin.y; r < room.origin.y + room.size; r++) {
+      for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
+        map[r][c] = '█'
+      }
+    }
+  })
+}
+
 function generateRooms(count, mapSize) {
   let rooms = [];
-  let maxSize = Math.floor(mapSize / 4);
+  let halls = [];
+  let maxSize = Math.floor( (3/70) * mapSize + 6.7 );
   let minSize = Math.floor(maxSize / 2);
-  for (var n = 0; n < count; n++) {
+  rooms.push({
+    origin: {
+      x: randomInt(minSize) + Math.floor(mapSize / 2 - minSize / 2),
+      y: randomInt(minSize) + Math.floor(mapSize / 2 - minSize / 2)
+    },
+    size: randomInt(minSize, maxSize)
+  })
+  for (var n = 1; n < count; n++) {
     var room;
     var attempts = 0;
     try {
       do {
-        room = randomRoom(minSize, maxSize, mapSize)
+        if (rooms.length > 0) {
+          room = randomRoom(minSize, maxSize, mapSize) //, rooms[rooms.length - 1], minSize)
+          console.log(room)
+        } else {
+          room = randomRoom(minSize, maxSize, mapSize)
+        }
         attempts++;
-        if (attempts > 10) {
-          throw 'could not generate a valid room in 10 attempts';
+        if (attempts > QUALITY) {
+          throw `could not generate a valid room in ${QUALITY} attempts`;
         }
       } while (touches(rooms, room))
       rooms.push(room)
@@ -40,6 +59,22 @@ function generateRooms(count, mapSize) {
     }
   }
   return rooms;
+}
+
+function longestDirection(fromRoom, mapSize) {
+  [
+    {}
+  ]
+}
+
+function drawLine(from, direction) {
+  return {
+    from: from,
+    to: {
+      x: from.x + direction.x,
+      y: from.y + direction.y
+    }
+  }
 }
 
 function touches(rooms, target) {
@@ -72,14 +107,40 @@ function randomInt(min, max) {
   }
 }
 
-function randomPoint(size) {
+function randomPoint(size, fromRoom, dist, roomSize) {
+  if (fromRoom) {
+    return {
+      x: randomInt(
+        Math.max(fromRoom.origin.x - dist - roomSize, 0),
+        Math.min(size, fromRoom.origin.x + fromRoom.size + dist)
+      ),
+      y: randomInt(
+        Math.max(fromRoom.origin.y - dist - roomSize, 0),
+        Math.min(size, fromRoom.origin.y + fromRoom.size + dist)
+      ),
+    }
+  }
   return {
-    x: randomInt(size), // Math.floor(Math.random() * size),
-    y: randomInt(size), // Math.floor(Math.random() * size),
+    x: randomInt(size),
+    y: randomInt(size),
   }
 }
 
-function randomRoom(min, max, mapSize) {
+function distance(a, b) {
+  let dx = b.x - a.x;
+  let dy = b.y - a.y;
+  return Math.sqrt(dx*dx + dy*dy)
+}
+
+function randomRoom(min, max, mapSize, fromRoom, distance) {
+  if (fromRoom) {
+    let size = randomInt(min, max)
+    let origin = randomPoint(mapSize - size, fromRoom, distance, size)
+    return {
+      origin: origin,
+      size: size
+    }
+  }
   let size = randomInt(min, max)
   let origin = randomPoint(mapSize - size)
   return {
