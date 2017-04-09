@@ -1,3 +1,7 @@
+import placeStatue from './statue';
+import statues from '../../assets/statues';
+import { placeSpawn, placeExit } from './placer';
+
 const EFFORT = 50;
 
 function generate(size, roomCount) {
@@ -10,20 +14,49 @@ function generate(size, roomCount) {
     grid.push(row)
   }
   let rooms = generateRooms(roomCount, size)
-  fillRooms(grid, rooms)
   let halls = span(rooms).reduce((acc, edge) => {
     return acc.concat(connect(edge.from, edge.to))
   }, [])
+  // generate statues
+  let st = [];
+  for (var i = 0; i < 3; i++) {
+    let r = randomInt(statues.length);
+    let s = statues[r]
+    st.push({
+      string: s,
+      origin: placeStatue(s, size)
+    })
+  }
+  let mainRoomSize = 5
+  let mainRooms = rooms.filter(room => room.size >= mainRoomSize)
+  let spawn = placeSpawn(mainRooms)
+  let exit = placeExit(mainRooms, spawn)
+  // Place spawn point
+  // Place leave point
+  // Place items
+  // Place weapons
+
+  fillRooms(grid, rooms)
   fillHalls(grid, halls)
-  console.log(rooms)
+  place(spawn, 'P', grid)
+  place(exit, 'E', grid)
+
+  grid.statues = st
+
   return grid
+  // return {
+  //   rooms: rooms,
+  //   halls: halls,
+  //   grid: grid,  // temp for now while rooms and halls are still rendered here...
+  //   statues: statues
+  // }
 }
 
 function fillRooms(map, rooms) {
   rooms.forEach(room => {
     for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
-      map[room.origin.y][c] = 'I'
-      map[room.origin.y + room.size - 1][c] = 'I'
+      map[room.origin.y][c] = 'I' // 'I' // '皿'
+      map[room.origin.y + room.size - 1][c] = 'I' // 'I'
     }
     for (var r = room.origin.y + 1; r < room.origin.y + room.size - 1; r++) {
       for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
@@ -37,6 +70,10 @@ function fillHalls(map, halls) {
   halls.forEach(hall => {
     map[hall.y][hall.x] = '.'
   })
+}
+
+function place(point, value, grid) {
+  grid[point.y][point.x] = value
 }
 
 /*                     *
@@ -85,7 +122,7 @@ function touches(rooms, target) {
   return rooms.some((room) => {
     var isTouching = false;
     var points = [];
-    // Keep a buffer of one on each edge.
+    // Keep a buffer of 1 on each edge.
     for (var r = target.origin.y-1; r <= target.origin.y+target.size; r++) {
       for (var c = target.origin.x-1; c <= target.origin.x+target.size; c++) {
         points.push({x: c, y: r})
@@ -137,6 +174,10 @@ function distance(a, b) {
  *  HALLWAY GENERATION  *
  *                      */
 
+// Returns a set of minimum-distance edges for connecting into hallways.
+// Uses Prim's algorithm to construct a minimum spanning tree
+// that connects each room's center point in O(n^2) time.
+// https://en.wikipedia.org/wiki/Prim%27s_algorithm
 function span(rooms) {
   if (rooms.length < 2) {
     return []
@@ -144,7 +185,7 @@ function span(rooms) {
   let points = rooms.map(center)
   let tree = [];
   let edges = [];
-  // pop point into tree
+  // pop first point into tree
   // calculate closest nextPoint from any point in tree
   // add nextPoint and the closeset into edges collection
   //   and add nextPoint into tree
@@ -156,7 +197,6 @@ function span(rooms) {
     var closestNextIndex = 0;
     points.forEach((point, index) => {
       tree.forEach(node => {
-        console.log(node, point)
         if (distance(node, point) < closestDistance) {
           closestEdge = {from: node, to: point}
           closestNextIndex = index;
@@ -166,7 +206,6 @@ function span(rooms) {
     })
     edges.push(closestEdge)
     tree.push(points[closestNextIndex])
-    console.log(points.length)
     points.splice(closestNextIndex, 1)
   }
   return edges;
