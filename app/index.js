@@ -7,14 +7,10 @@ const LEFT = 37
 const RIGHT = 39
 const UP = 38
 
-let grid = [
-  ['.', '.', '.', '.', '.', '.'],
-  ['.', '.', '.', '.', '.', '.'],
-  ['.', '.', '.', '.', '.', '.'],
-  ['.', '.', '.', '.', '.', '.'],
-  ['.', '.', '.', '.', '.', '.'],
-  ['.', '.', '.', '.', '.', '.'],
-]
+import {generate} from './generate';
+
+let grid = generate(30, 12)
+// let grid = generate(70, 34)
 
 class Grid extends Component {
   render() {
