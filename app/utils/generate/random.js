@@ -20,6 +20,14 @@ function randomPointInRoom(room) {
   }
 }
 
+// function randomNormal() {
+//   return (gaussian() + Math.PI) / (Math.PI * 2)
+// }
+//
+// function gaussian() {
+//   return Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
+// }
+
 module.exports = {
   randomInt,
   randomPoint,

@@ -1,8 +1,12 @@
 // identify main rooms (those above a certain size)
 // randomly populate items and objects
 import { randomPointInRoom, randomInt } from './random'
-import { center } from './room'
+import { center, roomInset } from './room'
 import { distance } from './math'
+
+function place(point, value, grid) {
+  grid[point.y][point.x] = value
+}
 
 function placeSpawn(rooms) {
   let i = randomInt(rooms.length)
@@ -25,7 +29,25 @@ function placeExit(rooms, spawn) {
   return center(rooms[furthest])
 }
 
+function placeInRooms(rooms) {
+  let i = randomInt(rooms.length)
+  let bound = roomInset(rooms[i], 1)
+  return randomPointInRoom(bound)
+}
+
+// Input: string (of ASCII chars)
+function placeStatue(statue, mapSize) {
+  let len = statue.split('').length
+  return {
+    x: randomInt(mapSize - len),
+    y: randomInt(mapSize - 1),
+  }
+}
+
 module.exports = {
+  place,
   placeSpawn,
   placeExit,
+  placeStatue,
+  placeInRooms,
 }
