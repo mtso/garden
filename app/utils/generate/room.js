@@ -11,7 +11,7 @@ import { EFFORT } from '../../config'
 function generateRooms(count, mapSize) {
   let rooms = [];
   let maxSize = Math.floor( (3/70) * mapSize + 6.7 );
-  let minSize = Math.floor(maxSize / 2);
+  let minSize = 3 // Math.floor(maxSize / 2); Math.min(3, Math.floor(maxSize / 2))
   for (var n = 0; n < count; n++) {
     var room;
     var attempts = 0;

@@ -12,8 +12,9 @@ import st from './assets/statues';
 
 let mapSize = 30
 // let grid = generate(14, 3)
-let grid = generate(mapSize, 12)
-// let grid = generate(70, 34)
+// let grid = generate(mapSize, 12)
+let grid = generate(70, 34)
+// let grid = generate(120, 54)
 // let grid = generate(200, 64)
 
 class Grid extends Component {
