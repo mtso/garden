@@ -29,8 +29,8 @@ function placeExit(rooms, spawn) {
   return center(rooms[furthest])
 }
 
-function placeInRooms(rooms) {
-  let i = randomInt(rooms.length)
+function placeInRooms(rooms, i) {
+  i = i || randomInt(rooms.length)
   let bound = roomInset(rooms[i], 1)
   return randomPointInRoom(bound)
 }
@@ -44,10 +44,36 @@ function placeStatue(statue, mapSize) {
   }
 }
 
+function placeTreasure(rooms, awayFrom, count) {
+  rooms = Array.from(rooms)
+  var farRooms = [];
+  var points = [];
+  for (var i = 0; i < count; i++) {
+    var furthest = 0;
+    var dist = 0;
+    rooms.forEach((room, index) => {
+      let d = distance(awayFrom, center(room))
+      if (d > dist) {
+        dist = d
+        furthest = index
+      }
+    })
+    let furthestRoom = rooms[furthest]
+    farRooms.push(rooms[furthest])
+    rooms.splice(furthest, 1)
+    awayFrom = center(furthestRoom)
+  }
+  farRooms.forEach(room => {
+    points.push(randomPointInRoom(room))
+  })
+  return points
+}
+
 module.exports = {
   place,
   placeSpawn,
   placeExit,
   placeStatue,
   placeInRooms,
+  placeTreasure,
 }
