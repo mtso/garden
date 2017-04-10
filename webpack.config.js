@@ -10,7 +10,7 @@ const indexInjector = new HtmlWebpackPlugin({
 module.exports = {
   entry: './app/index',
   resolve: {
-    extensions: ['.jsx', '.js'],
+    extensions: ['.jsx', '.js', '.json'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
