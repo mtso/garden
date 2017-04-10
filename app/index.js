@@ -13,7 +13,7 @@ import st from './assets/statues';
 let mapSize = 30
 // let grid = generate(14, 3)
 // let grid = generate(mapSize, 12)
-let grid = generate(70, 34)
+let grid = generate(30, 34)
 // let grid = generate(120, 54)
 // let grid = generate(200, 64)
 
@@ -25,7 +25,6 @@ class Grid extends Component {
     }).join('\n')
     grid = grid.split('')
 
-    console.log(this.props.grid.statues)
     this.props.grid.statues.forEach(statue => {
       statue.string.split('').forEach((c, i) => {
         let x = statue.origin.x * 2 + i
@@ -35,31 +34,9 @@ class Grid extends Component {
         }
       })
     })
-
-    // let statue = st[1].split('')
-    // statue.forEach((char, i) => {
-    //   // console.log('text is:', JSON.stringify(grid[i+330]))
-    //   if (grid[i+330] === ' ') {
-    //     grid[i+330] = <span style={{fontFamily: '"Monaco", "Consolas", monospace', color: 'lightGray'}}>{char}</span>
-    //   }
-    // })
     grid = grid.map(g => {
       return <span style={{fontFamily: '"Monaco", "Consolas", monospace'}}>{g}</span>
     })
-    // let grid = this.props.grid.reduce((g, row, r) => {
-    //   return g.concat( row.map((cell, c) => {
-    //     // console.log(cell)
-    //     return <span key={`${++i}`}></span>
-    //   }) )
-    //   // return {r}<span>{'\n'}</span>
-    //   // return row.join(' ')
-    // })//.join(<span>\n</span>)
-    // statue.forEach((char, i) => {
-    //   // console.log('text is:', JSON.stringify(grid[i+330]))
-    //   if (grid[i+330].innerText !== ' ') {
-    //     grid[i+330] = <span style={{fontFamily: '"Monaco", "Consolas", monospace'}}>{char}</span>
-    //   }
-    // })
     return (
       <pre style={{fontFamily: '"Monaco", "Consolas", monospace'}}>{grid}</pre>
     )

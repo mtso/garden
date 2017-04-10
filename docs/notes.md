@@ -34,6 +34,7 @@ Problematic (bad-spacing) art
 Ƹ̵̡Ӝ̵̨̄Ʒ
 くコ:彡
 "≧◔◡◔≦﻿",
+"☃",
 
 
 ```

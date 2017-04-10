@@ -44,7 +44,7 @@ function generate(size, roomCount, make) {
 
   // generate statues
   let st = [];
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < Math.floor(size / 7); i++) {
     let r = randomInt(statues.length);
     let s = statues[r]
     st.push({
