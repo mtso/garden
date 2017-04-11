@@ -121,7 +121,11 @@ alt status bar
 Lv.4 [:::::::.  ]                                   12♥  4♠
 ```
 
+Message bar with matching flourishes
+❧☙
+~~
 ```
+                  ❧ I seem to have lost my way ☙
 
 
 
