@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Scene from './components/Scene';
+import StatusBar from './components/StatusBar'
+import GameView from './components/GameView'
 
 const DOWN = 40
 const LEFT = 37
@@ -10,16 +12,58 @@ const UP = 38
 import { generate, generateDetailed } from './utils/generate';
 import st from './assets/statues';
 
-let mapSize = 30
-// let grid = generate(14, 3)
-// let grid = generate(mapSize, 12)
-let grid = generate(30, 34)
-// let grid = generate(120, 54)
-// let grid = generate(200, 64)
-let demo = generateDetailed(30, 34)
+// let mapSize = 30
+// // let grid = generate(14, 3)
+// // let grid = generate(mapSize, 12)
+// let grid = generate(30, 20)
+// // let grid = generate(120, 54)
+// // let grid = generate(200, 64)
+// let size = 30
+// let demo = generateDetailed(size, 15)
+// console.log(JSON.stringify(demo))
+// let dg = []
+// for (var r = 0; r < size; r++) {
+//   let row = []
+//   for (var c = 0; c < size; c++) {
+//     let tile = demo.map[tileKey(c, r)]
+//     if (tile) {
+//       row.push(tileForType(tile.type))
+//     } else {
+//       row.push(' ')
+//     }
+//   }
+//   dg.push(row)
+// }
+// console.log(dg)
 
 
-console.log(JSON.stringify(demo))
+// function tileForType(type) {
+//   switch (type) {
+//     case 'FLOOR':
+//       return '.'
+//     case 'WALL':
+//       return 'I'
+//     default:
+//       return 'X'
+//   }
+// }
+//
+// let buffer = dg.map(r => {
+//   return r.join(' ')
+// }).join('\n')
+// console.log(">>" + buffer + '<<')
+//
+// function tileKey(x, y) {
+//   return '' + x + ':' + y
+// }
+
+
+let testdata = require('../docs/generation-170411')
+testdata.mobs.forEach(m => {
+  m.isAlive = true
+})
+console.log(testdata)
+
 class Grid extends Component {
   render() {
     var i = 0;
@@ -50,8 +94,8 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      grid: grid,
-      playerPos: {x: 0, y: 0}
+      // grid: grid,
+      playerPos: testdata.spawn,
     }
     this.move = this.move.bind(this)
   }
@@ -59,22 +103,39 @@ class App extends Component {
     let direction = event.keyCode
     switch (direction) {
       case DOWN:
-        var nextPos = {
+        this.setState({ playerPos: {
           x: this.state.playerPos.x,
           y: this.state.playerPos.y + 1
-        }
-        let newGrid = this.state.grid;
-        newGrid[nextPos.y][nextPos.x] = 'S'
-        this.setState({
-          playerPos: nextPos,
-          grid: newGrid,
-        })
+        }})
+        break;
+      case UP:
+        this.setState({ playerPos: {
+          x: this.state.playerPos.x,
+          y: this.state.playerPos.y - 1
+        }})
+        break;
+      case RIGHT:
+        this.setState({ playerPos: {
+          x: this.state.playerPos.x + 1,
+          y: this.state.playerPos.y
+        }})
+        break;
+      case LEFT:
+        this.setState({ playerPos: {
+          x: this.state.playerPos.x - 1,
+          y: this.state.playerPos.y
+        }})
+        break;
+      default:
+        break;
     }
   }
   render() {
     return (
       <div tabIndex='0' onKeyDown={this.move}>
-        <Grid grid={this.state.grid} />
+        <pre>=========================================</pre>
+        <GameView data={testdata} width={41} position={this.state.playerPos} />
+        <StatusBar />
       </div>
     )
   }
