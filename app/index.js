@@ -7,7 +7,7 @@ const LEFT = 37
 const RIGHT = 39
 const UP = 38
 
-import {generate} from './utils/generate';
+import { generate, generateDetailed } from './utils/generate';
 import st from './assets/statues';
 
 let mapSize = 30
@@ -16,7 +16,10 @@ let mapSize = 30
 let grid = generate(30, 34)
 // let grid = generate(120, 54)
 // let grid = generate(200, 64)
+let demo = generateDetailed(30, 34)
 
+
+console.log(JSON.stringify(demo))
 class Grid extends Component {
   render() {
     var i = 0;
