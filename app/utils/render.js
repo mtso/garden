@@ -3,8 +3,7 @@ const data = {"rooms":[{"origin":{"x":7,"y":16},"size":3},{"origin":{"x":23,"y":
 let tiles = data.rooms.reduce(function(points, room) {
   // {"origin":{"x":9,"y":10},"size":4}
   // reduces all the rooms into tile points
-  // key becomes x:y like 12:3 ?
-
+  // key becomes x:y like 12:3
   for (var r = room.origin.y; r < room.origin.y + room.size; r++) {
     for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
       points.push(point(r, c))
@@ -28,95 +27,51 @@ function point(x, y) {
   return {x, y}
 }
 
-console.log(point(1, 3))
-
-// let center = point(0, 0)
-let center = point(20, 10)
-
-let size = 30;
-
-// let grid = [];
-// for (var r = 0; r < size; r++) {
-//   let row = []
-//   for (var c = 0; c < size; c++) {
-//     row.push(' ')
-//   }
-//   grid.push(row)
-// }
-
 function place(item, grid) {
   grid[item.position.y][item.position.x] = item.value
 }
 
-// place({value: '.', position: center}, grid)
+function key(point) {
+  return '' + tile.x + ':' + tile.y;
+}
 
-function drawView(tiles, position, fov) {
-  let mapped = {}
-  tiles.forEach(tile => {
+function mapTiles(tiles) {
+  return tiles.reduce((map, tile) => {
     let key = '' + tile.x + ':' + tile.y;
-    mapped[key] = '.'
-  })
-  let size = fov * 2 - 1
+    map[key] = '.'
+    return map
+  }, {})
+}
 
+function drawView(map, position, fov) {
+  let size = fov * 2 - 1
   let radius = fov - 1
   let center = point(radius, radius)
   let origin = point(position.x - radius, position.y - radius)
   let originOpp = point(position.x + radius, position.y + radius)
-  // console.log(`origin: ${JSON.stringify(origin)}`)
-  // console.log(`originOpp: ${JSON.stringify(originOpp)}`)
-  // console.log(`center: ${JSON.stringify(center)}`)
-  // console.log(`size: ${size}`)
-
   let grid = [];
+
   for (r = 0; r < size; r++) {
     let row = [];
     for (c = 0; c < size; c++) {
       let pointInGrid = point(c, r)
       let pointInTiles = point(pointInGrid.x + origin.x, pointInGrid.y + origin.y)
 
-      let key = '' + pointInTiles.x + ':' + pointInTiles.y;
-      if (distance(position, pointInTiles) < fov && mapped[key]) {
-        row.push('.')
-      } else {
-        row.push(' ')
-      }
-
+      let k = key(pointInTiles)
+      let isPoint = distance(position, pointInTiles) < fov && map[k]
+      row.push(isPoint ? '.' : ' ')
     }
     grid.push(row)
   }
   return grid
 }
 
-// render(tiles, center, FIELD_OF_VIEW)
-
-// function drawView(center, grid, fov) {
-//   // iterate through center.y - fov to center.y + fov
-//   //   iterate through center.x - fov to center.x + fov
-//   //     if (is valid point and distance is less than fov)
-//   //       draw cell
-//   let value = '.'
-//   for (var r = center.y - fov; r < center.y + fov; r++) {
-//     if (!grid[r]) { continue; }
-//     for (var c = center.x - fov; c < center.x + fov; c++) {
-//       let position = point(c, r)
-//       // console.log(grid[r][c])
-//       // console.log(distance(position, center))
-//       if (grid[r][c] && distance(position, center) < fov) {
-//         place({value, position}, grid)
-//       }
-//     }
-//   }
-// }
-
-// drawView(center, grid, FIELD_OF_VIEW)
 let grid = drawView(tiles, center, FIELD_OF_VIEW)
-// console.log(grid)
 
 function render(grid) {
   return grid.map(row => {
-    // console.log(row)
     return row.map(c => c || ' ').join(' ')
   }).join('\n')
 }
 
-console.log(render(grid))
+// console.log(render(grid))

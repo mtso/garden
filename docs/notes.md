@@ -1,5 +1,7 @@
 # Notes
 
+Perhaps even field of view is a function of player level=
+
 initial generated data consists of two things:
 the board: an array of floor or wall objects (each object contains tile type and point location)
 the objects:
@@ -18,6 +20,29 @@ item types are: weapon, health augmentation
 each cell should keep track of the last time the player stepped through
 
 each component needs to update for each loop (one player step)
+
+## Game Scene sketch
+```
+
+            Lv.4 [:::::::.  ]               12♥  4♠
+
+                          . .         .        
+                      I I . . . . . . .        
+                                .         I .  
+                    . . .       .         . .  
+                    . . .     I . I I     I . .
+                    I I I     . . . Ø       . .
+                              . . . .       .  
+                  .       . . . ¶ . . . . . . .
+                  .       .               . . .
+                  .       .               . . .
+                  I       . I I I         . . I
+                          . . . .         . .  
+                    . . . . . # . . . . . . .  
+                      .   I I I I       .      
+
+
+```
 
 ## Characters
 
