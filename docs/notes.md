@@ -21,10 +21,19 @@ each cell should keep track of the last time the player stepped through
 
 each component needs to update for each loop (one player step)
 
-## Game Scene sketch
+## Style
+
+```
+font-family: "SFMono-Regular", 'Monaco' Consolas, "Liberation Mono", Menlo, Courier, monospace;
 ```
 
-            Lv.4 [:::::::.  ]               12♥  4♠
+## Game Scene sketch
+```
+   Lv.4 [:::::::.  ]                                   12♥  4♠
+
+
+
+
 
                           . .         .        
                       I I . . . . . . .        
@@ -40,6 +49,10 @@ each component needs to update for each loop (one player step)
                           . . . .         . .  
                     . . . . . # . . . . . . .  
                       .   I I I I       .      
+
+
+
+
 
 
 ```
