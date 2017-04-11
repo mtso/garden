@@ -24,13 +24,13 @@ each component needs to update for each loop (one player step)
 ## Rendering
 
 state
-1. tiles (both floors and columns) are stored in an array of objects that contain tile type and point locations
-1. objects (potions, weapons, exit portal/boss crown) are stored in an array of objects that contain object type and point locations
-  1. objects also store whether they have been picked up or not.
-  1. objects that have been picked up cannot be used again
-  1. portal/boss pickup initiates a level reload or game over
-1. movable entities (enemies, player)
-  1. enemies have a current position, alive/dead bool, isEngaged bool, health value, attack value
+- tiles (both floors and columns) are stored in an array of objects that contain tile type and point locations
+- objects (potions, weapons, exit portal/boss crown) are stored in an array of objects that contain object type and point locations
+  - objects also store whether they have been picked up or not.
+  - objects that have been picked up cannot be used again
+  - portal/boss pickup initiates a level reload or game over
+- movable entities (enemies, player)
+  - enemies have a current position, alive/dead bool, isEngaged bool, health value, attack value
 
 1. enemy entities may only move onto floor tiles that do not have valid objects or other entities
 1. player may move onto any floor tile as long as a potential object occupying the floor is not the boss or an enemy entity
@@ -38,10 +38,11 @@ state
 view rendering steps
 1. tiles do not change state within a single round
 1. objects that are placed on top of a column should convert the column into a floor tile
-  1. each cell of tiles are joined by spaces
-  1. each row of tiles are joined by newlines
+1. join each cell of tiles with spaces
+1. join each row of tiles with newlines
 1. object's values are placed into the map by type (portal and boss always takes up three spaces)
 1. movable entities are placed
+1. add statues
 
 
 loop
