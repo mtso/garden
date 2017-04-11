@@ -114,6 +114,9 @@ font-family: Monaco, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Couri
 ```
 
 ## Game Scene sketch
+
+first try 21x21 pixel size, so (21 height 41 width)
+
 L4 denotes floor number,
 
 alt status bar
@@ -126,9 +129,9 @@ Message bar with matching flourishes
 ~~
 ```
                                   ❧ I seem to have lost my way ☙
-                  
-                  
-                  
+
+
+
                                           . .         .        
                                       I I . . . . . . .        
                                                 .         I .  
@@ -143,14 +146,17 @@ Message bar with matching flourishes
                                           . . . .         . .  
                                     . . . . . # . . . . . . .  
                                       .   I I I I       .      
-                  
-                  
-                  
-                  
-                  
+
+
+
+
+
                                         ④  ♣23  ♥12  ♠4
 ```
+```
+                                       (4)  ♣23  ♥12  ♠4
 
+```
 ## Characters
 
 ```
@@ -245,3 +251,26 @@ I I . I   H . . . . .     I I .           I I . I I
 
 
 ```
+
+
+
+
+
+I I . I                        
+. . . .                        
+. . . .                        
+I I . I           I I I I I I  
+    .             . . . . . .  
+    .             . . . . . .  
+I I I I     .             . . . . . .  
+. . . .     .             . . . . . .  
+. . . . . . .             I I I . I I  
+I I . I                         .      
+.                           .      
+.                           .      
+.     I I I I I I           .      
+.     . . . . . .           .      
+.     . . . . . .           .      
+. . . . . . . . .     I I I .      
+  . . . . . . . . . . . .      
+  I I I I I I     I I I        

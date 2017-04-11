@@ -10,6 +10,13 @@ import {
   placeInRooms,
   placeTreasure
 } from './placer';
+import {
+  FLOOR,
+  WALL,
+  POTION,
+} from '../../config'
+import Mob from '../../models/mob'
+import Player from '../../models/player'
 
 const NOP = _ => _;
 const ASCII = {
@@ -90,18 +97,6 @@ function generate(size, roomCount, make) {
   grid.statues = st
 
   return grid
-  // IDEA: return a redux-consumable state??
-  // return {
-  //   grid: grid,  // temp for now while rooms and halls are still rendered here...
-  //   rooms: rooms,
-  //   halls: halls,
-  //   statues: statues,
-  //   spawnPoint: spawn,
-  //   exitPoint: exit,
-  //   enemyPoints: enemies,
-  //   itemPoints: items,
-  //   treasurePoints: treasure,
-  // }
 }
 
 function fillRooms(map, rooms) {
@@ -179,34 +174,88 @@ function generateDetailed(size, roomCount, make) {
     enemies.push(placeInRooms(mainRooms))
   }
 
-  fillRooms(grid, rooms)
-  fillHalls(grid, halls)
-
-  items.forEach(item => {
-    place(item, make.item(), grid)
+  // Make sure tiles overlay properly
+  // objects > hallways > rooms
+  let roomTiles = tilesForRooms(rooms)
+  let hallTiles = halls.map(function(hall) {
+    return {
+      type: FLOOR,
+      position: hall
+    }
   })
-  treasure.forEach(t => {
-    place(t, make.treasure(), grid)
+  let objects = [].concat(treasure).concat(items)
+  let objectTiles = objects.map(function(obj) {
+    return {
+      type: FLOOR,
+      position: obj
+    }
   })
-  enemies.forEach(e => {
-    place(e, make.enemy(), grid)
+  let objectMap = mapTiles(objectTiles)
+  let floorMap = Object.assign(
+    {},
+    mapTiles(roomTiles),
+    mapTiles(hallTiles),
+    mapTiles(objectTiles)
+  )
+  objects = objects.map(function(pos) {
+    return {
+      type: POTION,
+      position: pos,
+      isPickedUp: false,
+    }
   })
-  place(spawn, make.spawn(), grid)
-  place(exit, make.exit(), grid)
+  let mobs = enemies.map(function(pos) {
+    return new Mob(pos, 1, 0)
+  })
 
-  grid.statues = st
+  // grid.statues = st
 
-  // return grid
-  // IDEA: return a redux-consumable state??
+  // let allTiles = roomTiles.concat(hallTiles)
   return {
-    grid: grid,  // temp for now while rooms and halls are still rendered here...
-    rooms: rooms,
-    halls: halls,
-    statues: statues,
-    spawnPoint: spawn,
-    exitPoint: exit,
-    enemyPoints: enemies,
-    itemPoints: items,
-    treasurePoints: treasure,
+    map: floorMap,
+    mobs,
+    objects,
+    exit,
+    spawn,
   }
+}
+
+function tilesForRooms(rooms) {
+  return rooms.reduce(function(tiles, room) {
+    for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
+      tiles.push({
+        type: WALL,
+        position: point(c, room.origin.y)
+      })
+      tiles.push({
+        type: WALL,
+        position: point(c, room.origin.y + room.size - 1)
+      })
+    }
+    for (var r = room.origin.y + 1; r < room.origin.y + room.size - 1; r++) {
+      for (var c = room.origin.x; c < room.origin.x + room.size; c++) {
+        tiles.push({
+          type: FLOOR,
+          position: point(c, r)
+        })
+      }
+    }
+    return tiles
+  }, [])
+}
+
+function mapTiles(tiles) {
+  return tiles.reduce((map, tile) => {
+    let k = key(tile.position)
+    map[k] = tile
+    return map
+  }, {})
+}
+
+function key(point) {
+  return '' + point.x + ':' + point.y;
+}
+
+function point(x, y) {
+  return {x, y}
 }

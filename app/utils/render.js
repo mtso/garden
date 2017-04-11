@@ -32,7 +32,7 @@ function place(item, grid) {
 }
 
 function key(point) {
-  return '' + tile.x + ':' + tile.y;
+  return '' + point.x + ':' + point.y;
 }
 
 function mapTiles(tiles) {
@@ -51,9 +51,9 @@ function drawView(map, position, fov) {
   let originOpp = point(position.x + radius, position.y + radius)
   let grid = [];
 
-  for (r = 0; r < size; r++) {
+  for (var r = 0; r < size; r++) {
     let row = [];
-    for (c = 0; c < size; c++) {
+    for (var c = 0; c < size; c++) {
       let pointInGrid = point(c, r)
       let pointInTiles = point(pointInGrid.x + origin.x, pointInGrid.y + origin.y)
 
