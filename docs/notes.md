@@ -1,5 +1,10 @@
 # Notes
 
+initial generated data consists of two things:
+the board: an array of floor or wall objects (each object contains tile type and point location)
+the objects:
+treasures, items, enemies, spawn point,
+
 Items have a function that take in the player as a parameter and returns a new player? (mutates the player's stats) (which are level, exp, health, attack, armor?)
 
 Each level of experience increases the chance of encountering the boss floor
@@ -14,7 +19,13 @@ each cell should keep track of the last time the player stepped through
 
 each component needs to update for each loop (one player step)
 
-## Save:
+## Characters
+
+```
+¶¿Ð×Ø©®¡¤^~  [x]
+```
+
+## Art
 
 Multiline statue
 ```
@@ -60,4 +71,39 @@ H H . H H
 . .\&/. .
 . . . . .
 H H . H H
+```
+
+
+Sketch
+```
+I I I   I I I I                                 I I I I I  
+T . . . . . . .       I I I                     . # . . .  
+I I I   . . . H . . . . . . .                   . #(.). .  
+        I I I I       I I I .     I I I I I     . . . . .  
+                            .     . . . . .     I I . I I  
+                            .     . . . H . . . . . .      
+                            .     . . . . .   .            
+I I I I                     .     I I . I I   .            
+. . . .                   I . I       .       .            
+. . . .   I I\I/. . . . . . . . . . . .       .            
+I I . I   H . . . . .     I I .           I I . I I        
+    .     . . . . . .       ((.))         . . . . .        
+    . . . . . .[,]. .   ^ↀᴥↀ^ .           . . S . H        
+          . . . . . .     I I . I I       . . . . .        
+          I I I I I I     . . . . .       I I I . I        
+                          . . . . .             .          
+                          . . . . .             .          
+                          I I I I I         I I . I        
+  I I I I                                   . . . .        
+  . . . H                                   . . . .        
+  . . . .                                   I I . I        
+  I I . I                                       .          
+      .               I I I I   I I I I I       .          
+      . I I           . . . .   . . . . .   I I . I I      
+      .).).>. . . . . . . . . . . .(.). .   . # . . .      
+      I I I           I I I I   . . . . . . . . . T .      
+                                I I I I I   . . . . .      
+                                            I I I I I      
+
+
 ```
