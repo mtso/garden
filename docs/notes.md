@@ -125,30 +125,30 @@ Message bar with matching flourishes
 ❧☙
 ~~
 ```
-                  ❧ I seem to have lost my way ☙
-
-
-
-                          . .         .        
-                      I I . . . . . . .        
-                                .         I .  
-                    . . .       .         ♠ .  
-                    . . ♥     I . I I     I . .
-                    I I I     . . . Ø       . .
-                              . . . .       .  
-                  .       . . . ¶ . . . . . . I
-                  .       .               . . .
-                  .       .               ♥ . .
-                  I       . I I I         . . .
-                          . . . .         . .  
-                    . . . . . # . . . . . . .  
-                      .   I I I I       .      
-
-
-
-
-
-                        ④  ♣23  ♥12  ♠4
+                                             ❧ I seem to have lost my way ☙
+                             
+                             
+                             
+                                                     . .         .        
+                                                 I I . . . . . . .        
+                                                           .         I .  
+                                               . . .       .         ♠ .  
+                                               . . ♥     I . I I     I . .
+                                               I I I     . . . Ø       . .
+                                                         . . . .       .  
+                                             .       . . . ¶ . . . . . . I
+                                             .       .               . . .
+                                             .       .               ♥ . .
+                                             I       . I I I         . . .
+                                                     . . . .         . .  
+                                               . . . . . # . . . . . . .  
+                                                 .   I I I I       .      
+                             
+                             
+                             
+                             
+                             
+                                                   ④  ♣23  ♥12  ♠4
 ```
 
 ## Characters
