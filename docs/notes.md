@@ -45,31 +45,31 @@ view rendering steps
 
 
 loop
-1. take player input
-  1. calculate next location
-    1. IF next location is an enemy entity or boss entity
-      1. attack based on attack power
-      1. take damage based on enemy or boss power
-      1. set enemy to isEngaged
-      1. do not move player position
-    1. ELSE validate player input:
-      1. must be floor tile
-      1. if next location contains an object (potion or weapon)
-        1. apply stats
-      1. if next location contains the exit portal (♦)
-        1. set state to advance floor
-      1. move into location
-1. for each enemy that is alive and not engaged
-  1. try to move in a random direction
-    1. while it has not tried four cardinal directions
-      1. roll a random direction
-        1. validate next location
-          1. must be floor tile
-          1. must not be object
-          1. must not be enemy entity
-            1. move into location
-1. reset any engaged enemies
-1. render view
+- take player input
+  - calculate next location
+    - IF next location is an enemy entity or boss entity
+      - attack based on attack power
+      - take damage based on enemy or boss power
+      - set enemy to isEngaged
+      - do not move player position
+    - ELSE validate player input:
+      - must be floor tile
+      - if next location contains an object (potion or weapon)
+        - apply stats
+      - if next location contains the exit portal (♦)
+        - set state to advance floor
+      - move into location
+- for each enemy that is alive and not engaged
+  - try to move in a random direction
+    - while it has not tried four cardinal directions
+      - roll a random direction
+        - validate next location
+          - must be floor tile
+          - must not be object
+          - must not be enemy entity
+            - move into location
+- reset any engaged enemies
+- render view
 
 ## Style
 
