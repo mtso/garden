@@ -22,7 +22,42 @@ each cell should keep track of the last time the player stepped through
 each component needs to update for each loop (one player step)
 
 ## Rendering
+need to save rendered reference map of each floor tileset
 
+it's possible to move up floors without touching any object
+higher floors increase heal strength, weapon pickups, and enemy attack and hp
+boss grows in strength per floor advanced
+higher exp increases boss floor encounter
+gain exp when picking up health, weapons, treasures
+gain small exp when advancing floor
+
+state:
+```
+{
+  tiles: [
+    {type: FLOOR, position: {x: 1, y: 1}},
+    {type: WALL, position: {x: 1, y: 0}},
+    ...
+  ],
+  objects: [
+    {type: POTION, position: {x: 1, y: 1}, pickedUp: true},
+    {type: TREASURE, position: {x: 1, y: 1}, pickedUp: true}
+    {type: WEAPON, position: {x: 1, y: 1}, pickedUp: false},
+    {type: EXIT, position: {x: 1, y: 1}},
+    /*or {type: BOSS, position: {x: 1, y: 1}, health: 30, attack: 40},*/
+  ],
+  entities: [
+    {health: 4, attack: 4, position: {x: 4, y: 6}},
+    ...
+  ],
+  player: {
+    hp: 6,
+    attack: 2,
+    position: {x: 3, y: 2},
+    exp: 45
+  }
+}
+```
 state
 - tiles (both floors and columns) are stored in an array of objects that contain tile type and point locations
 - objects (potions, weapons, exit portal/boss crown) are stored in an array of objects that contain object type and point locations
@@ -79,10 +114,14 @@ font-family: Monaco, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Couri
 ```
 
 ## Game Scene sketch
+L4 denotes floor number,
+
+alt status bar
 ```
-   Lv.4 [:::::::.  ]                                   12♥  4♠
+Lv.4 [:::::::.  ]                                   12♥  4♠
+```
 
-
+```
 
 
 
@@ -90,12 +129,12 @@ font-family: Monaco, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Couri
                       I I . . . . . . .        
                                 .         I .  
                     . . .       .         ♠ .  
-                    . . ♣     I . I I     I . .
+                    . . ♥     I . I I     I . .
                     I I I     . . . Ø       . .
                               . . . .       .  
                   .       . . . ¶ . . . . . . I
                   .       .               . . .
-                  .       .               ♣ . .
+                  .       .               ♥ . .
                   I       . I I I         . . .
                           . . . .         . .  
                     . . . . . # . . . . . . .  
@@ -105,16 +144,18 @@ font-family: Monaco, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Couri
 
 
 
-
+                        ④  ♣23  ♥12  ♠4
 ```
 
 ## Characters
 
 ```
+
+④①№
 (♦) portal
 ♠	♥	♦	♣
 ≈≈ bacon?
-¶¿Ð×Ø©®¡¤^~  [x]
+¶¿Ð×Ø © ®¡¤^~  [x]
 ```
 
 ## Art
@@ -189,7 +230,7 @@ I I . I   H . . . . .     I I .           I I . I I
                           I I I I I         I I . I        
   I I I I                                   . . . .        
   . . . H                                   . . . .        
-  . . . .                                   I I . I        
+  ? . . .                                   I I . I        
   I I . I                                       .          
       .               I I I I   I I I I I       .          
       . I I           . . . .   . . . . .   I I . I I      
