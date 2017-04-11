@@ -131,11 +131,15 @@ class App extends Component {
     }
   }
   render() {
+    // <pre>=========================================</pre>
+    // <pre>                                         </pre>
     return (
-      <div tabIndex='0' onKeyDown={this.move}>
-        <pre>=========================================</pre>
-        <GameView data={testdata} width={41} position={this.state.playerPos} />
-        <StatusBar />
+      <div tabIndex='0' onKeyDown={this.move} style={{textAlign: 'center'}}>
+        <div style={{display: 'inline-block', textAlign: 'left'}}>
+          <pre>                                         </pre>
+          <GameView data={testdata} width={41} position={this.state.playerPos} />
+          <StatusBar />
+        </div>
       </div>
     )
   }
