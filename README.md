@@ -1,4 +1,4 @@
-# garden
+# [play garden](https://mtso.github.io/garden)
 
 Roguelike garden crawler game.
 
