@@ -2,6 +2,36 @@
 
 Roguelike garden crawler game.
 
+## Buffer Shot
+```
+                                                                                                  
+                                  ❧ I seem to have lost my way ☙
+
+
+
+                                          . .         .        
+                                      I I . . . . . . .        
+                                                .         I .  
+                                    . . .       .         ♠ .  
+                                    . . ♥     I . I I     I . .
+                                    I I I     . . . Ø       . .
+                                              . . . .       .  
+                                  .       . . . ¶ . . . . . . I
+                                  .       .               . . .
+                                  .       .               ♥ . .
+                                  I       . I I I         . . .
+                                          . . . .         . .  
+                                    . . . . . # . . . . . . .  
+                                      .   I I I I       .      
+
+
+
+
+
+                                        (1)  ♣23  ♥12  ♠4
+
+```
+
 ## User Stories
 
 1. I have health, a level, and a weapon. I can pick up a better weapon. I can pick up health items.
