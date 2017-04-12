@@ -1,6 +1,36 @@
-# garden
+# [play garden](https://mtso.github.io/garden)
 
-Roguelike garden crawler game.
+Rogue-like garden stroller.
+
+## Buffer Shot
+```
+                                                                                                  
+                                  ❧ I seem to have lost my way ☙
+
+
+
+                                          . .         .        
+                                      I I . . . . . . .        
+                                                .         I .  
+                                    . . .       .         ♠ .  
+                                    . . ♥     I . I I     I . .
+                                    I I I     . . . Ø       . .
+                                              . . . .       .  
+                                  .       . . . ¶ . . . . . . I
+                                  .       .               . . .
+                                  .       .               ♥ . .
+                                  I       . I I I         . . .
+                                          . . . .         . .  
+                                    . . . . . # . . . . . . .  
+                                      .   I I I I       .      
+
+
+
+
+
+                                        (1)  ♣23  ♥12  ♠4
+
+```
 
 ## User Stories
 

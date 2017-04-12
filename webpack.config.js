@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const indexInjector = new HtmlWebpackPlugin({
   filename: 'index.html',
-  template: './app/index.template',
+  template: './app/index.template.html',
   inject: 'body',
 });
 
