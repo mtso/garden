@@ -20,6 +20,7 @@ const mapReducer = (state = {}, action) => {
     return state
   }
 }
+
 const floorReducer = (state = 0, action) => {
   return action.type === 'ADVANCE_FLOOR' ?
     state + 1 : state
