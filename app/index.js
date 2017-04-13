@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Scene from './components/Scene';
 import StatusBar from './components/StatusBar'
-import GameView from './components/GameView'
+import { ConnectedGameView } from './components/GameView'
 
 const DOWN = 40
 const LEFT = 37
@@ -62,6 +62,9 @@ let testdata = require('../docs/generation-170411')
 testdata.mobs.forEach(m => {
   m.isAlive = true
 })
+testdata.player = {
+  position: testdata.spawn
+}
 console.log(testdata)
 
 class Grid extends Component {
@@ -93,10 +96,10 @@ class Grid extends Component {
 class App extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      // grid: grid,
-      playerPos: testdata.spawn,
-    }
+    // this.state = {
+    //   // grid: grid,
+    //   playerPos: testdata.spawn,
+    // }
     this.move = this.move.bind(this)
   }
   move(event) {
@@ -109,10 +112,12 @@ class App extends Component {
         }})
         break;
       case UP:
-        this.setState({ playerPos: {
-          x: this.state.playerPos.x,
-          y: this.state.playerPos.y - 1
-        }})
+        this.props.walkNorth()
+
+        // this.setState({ playerPos: {
+        //   x: this.state.playerPos.x,
+        //   y: this.state.playerPos.y - 1
+        // }})
         break;
       case RIGHT:
         this.setState({ playerPos: {
@@ -137,12 +142,53 @@ class App extends Component {
       <div tabIndex='0' onKeyDown={this.move} style={{textAlign: 'center'}}>
         <div style={{display: 'inline-block', textAlign: 'left'}}>
           <pre>                                         </pre>
-          <GameView data={testdata} width={41} position={this.state.playerPos} />
+          <ConnectedGameView />
           <StatusBar />
         </div>
       </div>
     )
   }
 }
+// <GameView data={testdata} width={41} position={this.props.player.position} />
 
-ReactDOM.render(<App />, document.getElementById('app'));
+import { createStore } from 'redux'
+import { Provider, connect } from 'react-redux'
+import {
+  walkNorthAction,
+  walkSouthAction,
+  walkEastAction,
+  walkWestAction,
+} from './actions/walk'
+import mapReducer from './reducers/mapReducer'
+
+// let mapStateToProps = (state) => {
+//
+// }
+
+let mapDispatchToProps = (dispatch) => {
+  return {
+    walkNorth: () => dispatch(walkNorthAction()),
+  }
+}
+const ConnectedApp = connect(
+  null,
+  mapDispatchToProps
+)(App)
+
+const store = createStore(mapReducer, testdata)
+
+store.subscribe(() => {
+  console.log(store.getState())
+})
+
+class AppWrapper extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <ConnectedApp />
+      </Provider>
+    )
+  }
+}
+
+ReactDOM.render(<AppWrapper />, document.getElementById('app'));

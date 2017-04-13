@@ -19,10 +19,6 @@ function point(x, y) {
   return {x, y}
 }
 
-function place(item, grid) {
-  grid[item.position.y][item.position.x] = item.value
-}
-
 function tileKey(point) {
   return '' + point.x + ':' + point.y;
 }
@@ -102,6 +98,9 @@ function drawView(data, position, fov) {
 
 // render view with map and position data and size
 class GameView extends Component {
+  constructor(props) {
+    super(props)
+  }
   render() {
     // let pos = this.props.data.player.position
     // USE PLAYER POSITION INSTEAD
@@ -114,4 +113,20 @@ class GameView extends Component {
   }
 }
 
-export default GameView
+import { connect } from 'react-redux'
+
+const mapStateToProps = (state) => {
+  return {
+    position: state.player.position,
+    data: state,
+    width: state.width || 41
+  }
+}
+
+export const ConnectedGameView = connect(
+  mapStateToProps,
+  null
+)(GameView)
+
+// export const ConnectedGameView
+// export const GameView
