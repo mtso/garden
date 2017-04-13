@@ -224,7 +224,7 @@ function generateDetailed(size, roomCount, make) {
   })
 
   let mobs = enemies.map(function(pos) {
-    return new Mob(pos, 1, 0)
+    return new Mob(pos, 1, 1)
   })
 
   // grid.statues = st
