@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { char } from '../config'
+import { connect } from 'react-redux'
 
 const FIELD_OF_VIEW = 8
 
@@ -27,7 +28,7 @@ class StatusBar extends Component {
     let floorString = '(' + floor + ')'
     let expString = char.EXP + exp
     let healthString = char.HEALTH + health
-    let attackString = char.ATTACK + attack
+    let attackString = '' + char.ATTACK + attack
     infoWidth += floorString.length
     infoWidth += expString.length
     infoWidth += healthString.length
@@ -47,4 +48,17 @@ class StatusBar extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    player: state.player,
+    floor: state.floor,
+  }
+}
+
+const ConnectedStatusBar = connect(
+  mapStateToProps,
+  null
+)(StatusBar)
+
+export { ConnectedStatusBar }
 export default StatusBar

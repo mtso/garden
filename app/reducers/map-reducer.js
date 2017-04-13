@@ -2,6 +2,7 @@ import {
   WALK,
 } from '../config/action-type'
 import { generateDetailed } from '../utils/generate'
+import { TREASURE, POTION, WEAPON } from '../config'
 
 let initialPlayer = {
   exp: 0,
@@ -47,7 +48,7 @@ const generateFloor = (floor = 0, player = initialPlayer, isBossFloor = false) =
 
 // const mobsReducer = (state = {}, action) => {
 //   let objectMap = state.objects.reduce((map, obj) => {
-//     if (pickedUp) {
+//     if (isPickedUp) {
 //       return map
 //     }
 //     let key = obj.position.x + ':' + obj.position.y
@@ -64,6 +65,10 @@ const generateFloor = (floor = 0, player = initialPlayer, isBossFloor = false) =
 //       let nextPosition =
 //     }
 //   })
+// }
+
+// const applyItem = (state) => {
+//   switch (state)
 // }
 
 const playerReducer = (state = initialPlayer, action) => {
@@ -97,6 +102,44 @@ const mapReducer = (state = initialState, action) => {
           console.log(next)
           return next // generateFloor(state.floor, state.player, isBossFloor)
         }
+        let item = state.objectMap[nextKey]
+        let objectMap = state.objectMap
+        let objects = state.objects
+        if (item) {
+          switch (item.type) {
+            case TREASURE:
+              player.attack += Math.floor(Math.random() * 12) - 5
+              player.health += Math.floor(Math.random() * 12) - 5
+              player.exp += 10
+              break;
+            case POTION:
+              player.health += Math.floor(Math.random() * 5) - 1
+              player.exp += 5
+              break;
+            case WEAPON:
+              player.attack += Math.floor(Math.random() * 5) - 1
+              player.exp += 5
+              break;
+            default:
+              break;
+          }
+          console.log(Math.floor(Math.random() * 12) - 5)
+          console.log(player)
+          item.isPickedUp = true
+          objectMap = Object.assign(
+            {}, state.objectMap, {
+              nextKey: item
+            }
+          )
+          objects = objects.map(o => {
+            if (nextKey === o.position.x + ':' + o.position.y) {
+              console.log(o)
+              o.isPickedUp = true
+            }
+            return o
+          })
+        }
+
         let mobMap = state.mobs.reduce((map, mob) => {
           if (!mob.isAlive) {
             return map
@@ -108,7 +151,9 @@ const mapReducer = (state = initialState, action) => {
         console.log(mobMap)
         if (!mobMap[nextKey]) {
           return Object.assign({}, state, {
-            player: playerReducer(player, action)
+            player: playerReducer(player, action),
+            objects,
+            objectMap,
           })
         } else {
           return state

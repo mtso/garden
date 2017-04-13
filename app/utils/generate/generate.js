@@ -14,6 +14,8 @@ import {
   FLOOR,
   WALL,
   POTION,
+  TREASURE,
+  WEAPON,
 } from '../../config'
 import Mob from '../../models/mob'
 import Player from '../../models/player'
@@ -197,13 +199,30 @@ function generateDetailed(size, roomCount, make) {
     mapTiles(hallTiles),
     mapTiles(objectTiles)
   )
-  objects = objects.map(function(pos) {
+  // objects = objects.map(function(pos) {
+  //   return {
+  //     type: POTION,
+  //     position: pos,
+  //     isPickedUp: false,
+  //   }
+  // })
+
+  treasure = treasure.map(t => {
     return {
-      type: POTION,
-      position: pos,
-      isPickedUp: false,
+      type: TREASURE,
+      position: t,
     }
   })
+
+  items = items.map(i => {
+    let isHealth = randomInt(2) === 0
+    console.log(isHealth)
+    return {
+      type: isHealth ? POTION : WEAPON,
+      position: i,
+    }
+  })
+
   let mobs = enemies.map(function(pos) {
     return new Mob(pos, 1, 0)
   })
@@ -214,7 +233,7 @@ function generateDetailed(size, roomCount, make) {
   return {
     map: floorMap,
     mobs,
-    objects,
+    objects: treasure.concat(items),
     exit,
     spawn,
   }

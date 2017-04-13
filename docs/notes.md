@@ -40,9 +40,9 @@ state:
     ...
   ],
   objects: [
-    {type: POTION, position: {x: 1, y: 1}, pickedUp: true},
-    {type: TREASURE, position: {x: 1, y: 1}, pickedUp: true}
-    {type: WEAPON, position: {x: 1, y: 1}, pickedUp: false},
+    {type: POTION, position: {x: 1, y: 1}, isPickedUp: true},
+    {type: TREASURE, position: {x: 1, y: 1}, isPickedUp: true}
+    {type: WEAPON, position: {x: 1, y: 1}, isPickedUp: false},
     {type: EXIT, position: {x: 1, y: 1}},
     /*or {type: BOSS, position: {x: 1, y: 1}, health: 30, attack: 40},*/
   ],

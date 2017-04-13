@@ -60,7 +60,7 @@ minimum state object:
         "x": 22,
         "y": 26
       },
-      "pickedUp": false
+      "isPickedUp": false
     },
     ...
   ],

@@ -14,6 +14,7 @@ const MOB = 'MOB'
 let char = {};
 char.EXP = '♣'
 char.HEALTH = '♥'
+char.WEAPON = '♠'
 char.ATTACK = '♠'
 char.FLOOR = '.'
 char.WALL = 'I'
@@ -22,6 +23,7 @@ char.MOB = '#'
 char.EXIT = '(♦)'
 char.BOSS = '\\&/'
 char.POTION = '♥' // temporary while health/attack items not implemented
+char.TREASURE = '?'
 
 module.exports = {
   'EFFORT': EFFORT,
