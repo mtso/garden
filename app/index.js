@@ -164,7 +164,9 @@ const ConnectedApp = connect(
   mapDispatchToProps
 )(App)
 
-const store = createStore(mapReducer, testdata)
+const store = createStore(mapReducer) //, testdata)
+store.dispatch({type: ''})
+console.log(store.getState())
 
 store.subscribe(() => {
   console.log(store.getState())
