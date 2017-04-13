@@ -1,4 +1,5 @@
 import {
+  WALK,
   WALK_NORTH,
   WALK_SOUTH,
   WALK_WEST,
@@ -6,17 +7,29 @@ import {
 } from '../config/action-type'
 
 export const walkNorthAction = () => {
-  return {type: WALK_NORTH}
+  return {
+    type: WALK,
+    direction: {x: 0, y: -1}
+  }
 }
 
 export const walkSouthAction = () => {
-  return {type: WALK_SOUTH}
+  return {
+    type: WALK,
+    direction: {x: 0, y: 1}
+  }
 }
 
 export const walkWestAction = () => {
-  return {type: WALK_WEST}
+  return {
+    type: WALK,
+    direction: {x: -1, y: 0}
+  }
 }
 
 export const walkEastAction = () => {
-  return {type: WALK_EAST}
+  return {
+    type: WALK,
+    direction: {x: 1, y: 0}
+  }
 }

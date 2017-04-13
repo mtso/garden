@@ -145,7 +145,7 @@ import {
   walkEastAction,
   walkWestAction,
 } from './actions/walk'
-import mapReducer from './reducers/mapReducer'
+import mapReducer from './reducers/map-reducer'
 
 // let mapStateToProps = (state) => {
 //

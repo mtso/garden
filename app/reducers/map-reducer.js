@@ -1,9 +1,5 @@
-// import { point }
 import {
-  WALK_NORTH,
-  WALK_SOUTH,
-  WALK_WEST,
-  WALK_EAST,
+  WALK,
 } from '../config/action-type'
 
 const direction = (action) => {
@@ -21,25 +17,30 @@ const direction = (action) => {
   }
 }
 
+const playerReducer = (state = {}, action) => {
+  switch (action.type) {
+    case WALK:
+      return Object.assign({}, state, {
+        position: action.next
+      })
+    default:
+      return state
+  }
+}
+
 const mapReducer = (state = {}, action) => {
   switch (action.type) {
-    case WALK_NORTH:
-    case WALK_SOUTH:
-    case WALK_WEST:
-    case WALK_EAST:
-      let player = state.player || {}
-      let pos = player.position || {x: 0, y: 10}
-      let delta = direction(action)
+    case WALK:
+      let player = state.player
       let nextPos = {
-        x: pos.x + delta.x,
-        y: pos.y + delta.y
+        x: player.position.x + action.direction.x,
+        y: player.position.y + action.direction.y,
       }
       let nextKey = nextPos.x + ':' + nextPos.y
+      action.next = nextPos
       if (state.map[nextKey] && state.map[nextKey].type === 'FLOOR') {
         return Object.assign({}, state, {
-          player: Object.assign({}, player, {
-            position: nextPos
-          })
+          player: playerReducer(player, action)
         })
       }
     default:
