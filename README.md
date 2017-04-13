@@ -4,7 +4,7 @@ Rogue-like garden stroller.
 
 ## Buffer Shot
 ```
-                                                                                                  
+
                                   ❧ I seem to have lost my way ☙
 
 
@@ -44,4 +44,6 @@ Rogue-like garden stroller.
 1. When I find and beat the boss, I win.
 1. The game should be challenging, but theoretically winnable.
 
+## Known Issues
 
+- When a mob is generated on top of the exit, the mob is displayed, (but mob should be placed elsewhere)

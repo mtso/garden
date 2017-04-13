@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Scene from './components/Scene';
 import StatusBar from './components/StatusBar'
 import { ConnectedGameView } from './components/GameView'
+import { ConnectedStatusBar } from './components/StatusBar'
 
 const DOWN = 40
 const LEFT = 37
@@ -129,7 +130,7 @@ class App extends Component {
         <div style={{display: 'inline-block', textAlign: 'left'}}>
           <pre>                                         </pre>
           <ConnectedGameView />
-          <StatusBar />
+          <ConnectedStatusBar />
         </div>
       </div>
     )
@@ -164,7 +165,9 @@ const ConnectedApp = connect(
   mapDispatchToProps
 )(App)
 
-const store = createStore(mapReducer, testdata)
+const store = createStore(mapReducer) //, testdata)
+store.dispatch({type: ''})
+console.log(store.getState())
 
 store.subscribe(() => {
   console.log(store.getState())
