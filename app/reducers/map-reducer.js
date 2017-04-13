@@ -28,6 +28,7 @@ import {
 // }
 
 const playerReducer = (state = {}, action) => {
+  console.log('hello')
   switch (action.type) {
     case WALK:
       return Object.assign({}, state, {
@@ -57,7 +58,7 @@ const mapReducer = (state = {}, action) => {
           map[key] = mob
           return map
         })
-        if (mobMap[nextKey]) {
+        if (!mobMap[nextKey]) {
           return Object.assign({}, state, {
             player: playerReducer(player, action)
           })
