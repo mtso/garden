@@ -106,30 +106,16 @@ class App extends Component {
     let direction = event.keyCode
     switch (direction) {
       case DOWN:
-        this.setState({ playerPos: {
-          x: this.state.playerPos.x,
-          y: this.state.playerPos.y + 1
-        }})
+        this.props.walkSouth()
         break;
       case UP:
         this.props.walkNorth()
-
-        // this.setState({ playerPos: {
-        //   x: this.state.playerPos.x,
-        //   y: this.state.playerPos.y - 1
-        // }})
         break;
       case RIGHT:
-        this.setState({ playerPos: {
-          x: this.state.playerPos.x + 1,
-          y: this.state.playerPos.y
-        }})
+        this.props.walkEast()
         break;
       case LEFT:
-        this.setState({ playerPos: {
-          x: this.state.playerPos.x - 1,
-          y: this.state.playerPos.y
-        }})
+        this.props.walkWest()
         break;
       default:
         break;
@@ -168,6 +154,9 @@ import mapReducer from './reducers/mapReducer'
 let mapDispatchToProps = (dispatch) => {
   return {
     walkNorth: () => dispatch(walkNorthAction()),
+    walkSouth: () => dispatch(walkSouthAction()),
+    walkWest: () => dispatch(walkWestAction()),
+    walkEast: () => dispatch(walkEastAction()),
   }
 }
 const ConnectedApp = connect(
