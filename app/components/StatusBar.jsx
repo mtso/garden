@@ -15,7 +15,7 @@ function pad(string, count, char) {
 class StatusBar extends Component {
   render() {
     let floor = this.props.floor || 1;
-    let width = this.props.width || 41;
+    let width = this.props.width || 48; // 41;
     let padding = this.props.padding || 2;
     let player = this.props.player || {}
     let exp = player.exp || 0
@@ -62,4 +62,4 @@ const ConnectedStatusBar = connect(
 )(StatusBar)
 
 export { ConnectedStatusBar }
-export default StatusBar
+// export default StatusBar

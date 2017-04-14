@@ -13,60 +13,14 @@ const UP = 38
 import { generate, generateDetailed } from './utils/generate';
 import st from './assets/statues';
 
-// let mapSize = 30
-// // let grid = generate(14, 3)
-// // let grid = generate(mapSize, 12)
-// let grid = generate(30, 20)
-// // let grid = generate(120, 54)
-// // let grid = generate(200, 64)
-// let size = 30
-// let demo = generateDetailed(size, 15)
-// console.log(JSON.stringify(demo))
-// let dg = []
-// for (var r = 0; r < size; r++) {
-//   let row = []
-//   for (var c = 0; c < size; c++) {
-//     let tile = demo.map[tileKey(c, r)]
-//     if (tile) {
-//       row.push(tileForType(tile.type))
-//     } else {
-//       row.push(' ')
-//     }
-//   }
-//   dg.push(row)
+// let testdata = require('../docs/generation-170411')
+// testdata.mobs.forEach(m => {
+//   m.isAlive = true
+// })
+// testdata.player = {
+//   position: testdata.spawn
 // }
-// console.log(dg)
-
-
-// function tileForType(type) {
-//   switch (type) {
-//     case 'FLOOR':
-//       return '.'
-//     case 'WALL':
-//       return 'I'
-//     default:
-//       return 'X'
-//   }
-// }
-//
-// let buffer = dg.map(r => {
-//   return r.join(' ')
-// }).join('\n')
-// console.log(">>" + buffer + '<<')
-//
-// function tileKey(x, y) {
-//   return '' + x + ':' + y
-// }
-
-
-let testdata = require('../docs/generation-170411')
-testdata.mobs.forEach(m => {
-  m.isAlive = true
-})
-testdata.player = {
-  position: testdata.spawn
-}
-console.log(testdata)
+// console.log(testdata)
 
 class Grid extends Component {
   render() {
@@ -125,10 +79,11 @@ class App extends Component {
   render() {
     // <pre>=========================================</pre>
     // <pre>                                         </pre>
+    let style = this.props.isBossFloor ? 'boss-floor' : 'floor'
     return (
-      <div tabIndex='0' onKeyDown={this.move} style={{textAlign: 'center'}}>
+      <div tabIndex='0' onKeyDown={this.move} style={{textAlign: 'center'}} className={style + ' container'}>
         <div style={{display: 'inline-block', textAlign: 'left'}}>
-          <pre>                                         </pre>
+          <pre>                                           </pre>
           <ConnectedGameView />
           <ConnectedStatusBar />
         </div>
@@ -148,9 +103,11 @@ import {
 } from './actions/walk'
 import mapReducer from './reducers/map-reducer'
 
-// let mapStateToProps = (state) => {
-//
-// }
+let mapStateToProps = (state) => {
+  return {
+    isBossFloor: state.isBossFloor,
+  }
+}
 
 let mapDispatchToProps = (dispatch) => {
   return {
@@ -161,16 +118,16 @@ let mapDispatchToProps = (dispatch) => {
   }
 }
 const ConnectedApp = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(App)
 
 const store = createStore(mapReducer) //, testdata)
 store.dispatch({type: ''})
-console.log(store.getState())
+// console.log(store.getState())
 
 store.subscribe(() => {
-  console.log(store.getState())
+  // console.log(store.getState())
 })
 
 class AppWrapper extends Component {
