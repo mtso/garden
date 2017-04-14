@@ -3,6 +3,7 @@ import {
 } from '../config/action-type'
 import { generateDetailed } from '../utils/generate'
 import { TREASURE, POTION, WEAPON, FLOOR } from '../config'
+import Mob from '../models/Mob'
 
 let initialPlayer = {
   exp: 0,
@@ -11,11 +12,17 @@ let initialPlayer = {
   position: {x: 0, y: 0}
 }
 
+const tileKey = (point) => point.x + ':' + point.y;
+
 const generateFloor = (floor = 0, player = initialPlayer, isBossFloor = false) => {
   let size = Math.floor(30 * (Math.floor(player.exp / 200) + 1))
   let rooms = Math.floor(size / 2)
   console.log(size, rooms)
   let data = generateDetailed(size, rooms)
+
+  data.mobs = data.mobs.map(function(pos) {
+    return new Mob(pos, 10, 1)
+  })
 
   player.position = data.spawn
   data.objectMap = data.objects.reduce((map, obj) => {
@@ -35,41 +42,13 @@ const generateFloor = (floor = 0, player = initialPlayer, isBossFloor = false) =
       attack: Math.floor(floor + 1 / 20) * Math.floor((player.exp + 1) / 200),
     }
   }
-  console.log(data)
+  // console.log(data)
   return Object.assign({}, data, {
     floor: floor + 1,
     player,
+    isBossFloor,
   })
 }
-
-// const mobReducer = (state = {}, action) => {
-//
-// }
-
-// const mobsReducer = (state = {}, action) => {
-//   let objectMap = state.objects.reduce((map, obj) => {
-//     if (isPickedUp) {
-//       return map
-//     }
-//     let key = obj.position.x + ':' + obj.position.y
-//     map[key] = obj
-//     return map
-//   })
-//   state.mobs.reduce((moved, mob) => {
-//     if (!mob.isAlive || mob.isEngaged) {
-//       return moved
-//     }
-//     let tries = 0;
-//     while (tries < 4) {
-//       tries++;
-//       let nextPosition =
-//     }
-//   })
-// }
-
-// const applyItem = (state) => {
-//   switch (state)
-// }
 
 const playerReducer = (state = initialPlayer, action) => {
   switch (action.type) {
@@ -86,6 +65,8 @@ let initialState = generateFloor()
 
 const mapReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'START':
+      return generateFloor()
     case WALK:
       let player = state.player
       let nextPos = {
@@ -107,16 +88,16 @@ const mapReducer = (state = initialState, action) => {
         if (item) {
           switch (item.type) {
             case TREASURE:
-              player.attack = Math.max(1, player.attack + Math.floor(Math.random() * 12) - 5)
-              player.health += Math.floor(Math.random() * 12) - 5
-              player.exp += 10
+              player.attack = Math.max(1, player.attack + Math.floor(Math.random() * 12) - 3)
+              player.health += Math.floor(Math.random() * 12) - 3
+              player.exp += 20 // 15
               break;
             case POTION:
               player.health += Math.floor(Math.random() * 5) - 1
               player.exp += 5
               break;
             case WEAPON:
-              player.attack = Math.max(1, player.attack + Math.floor(Math.random() * 12) - 5)
+              player.attack = Math.max(1, player.attack + Math.floor(Math.random() * 5) - 1)
               player.exp += 5
               break;
             default:
@@ -161,8 +142,10 @@ const mapReducer = (state = initialState, action) => {
           }
         }
 
-        if (player.health < 0) {
+        if (player.health <= 0) {
           // GAME OVER
+          // isGameOver = true
+          throw new Error('GAME OVER')
         }
 
         state.mobs.forEach(m => {

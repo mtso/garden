@@ -102,13 +102,12 @@ class GameView extends Component {
     super(props)
   }
   render() {
-    // let pos = this.props.data.player.position
-    // USE PLAYER POSITION INSTEAD
-    let pos = this.props.position // || data.spawn
+    let pos = this.props.position
     let view = drawView(this.props.data, pos, FIELD_OF_VIEW)
     let rendered = render(view, this.props.width, isEqual(pos, this.props.data.exit))
+    let style = this.props.isBossFloor ? 'boss-floor' : 'floor'
     return(
-      <pre>{rendered}</pre>
+      <pre className={style}>{rendered}</pre>
     )
   }
 }
@@ -119,7 +118,8 @@ const mapStateToProps = (state) => {
   return {
     position: state.player.position,
     data: state,
-    width: state.width || 41
+    width: state.width || 41,
+    isBossFloor: state.isBossFloor,
   }
 }
 

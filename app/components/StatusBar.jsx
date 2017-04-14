@@ -42,8 +42,9 @@ class StatusBar extends Component {
 
     let leftPad = pad('', Math.floor((width - infoWidth) / 2) , ' ')
 
+    // <pre>{leftPad}{floor}{space}{exp}{space}{health}{space}{attack}</pre>
     return(
-      <pre>{leftPad}{floor}{space}{exp}{space}{health}{space}{attack}</pre>
+      <pre>{leftPad}{exp}{space}{health}{space}{attack}</pre>
     )
   }
 }
