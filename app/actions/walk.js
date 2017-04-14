@@ -4,7 +4,7 @@ import {
   WALK_SOUTH,
   WALK_WEST,
   WALK_EAST,
-} from '../config/action-type'
+} from './action-type'
 
 export const walkNorthAction = () => {
   return {

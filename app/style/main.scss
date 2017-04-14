@@ -11,11 +11,19 @@ html, body {
 .boss-floor {
   background-color: $background-boss;
   color: $color-boss;
+
+  a {
+    color: $color-boss;
+  }
 }
 
 .floor {
   background-color: $background;
   color: $color;
+
+  a {
+    color: $color;
+  }
 }
 
 div {
@@ -27,12 +35,26 @@ div {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  // .boss-floor  {
+  //   background-color: lightGray;
+  // }
 }
 
 .container:focus {
   outline: none;
   opacity: 1;
   height: 100%;
+}
+
+.container.boss-floor  {
+  background-color: desaturate(beige, 40%);
+  color: darken(beige, 70%);
+}
+
+.container.boss-floor:focus  {
+  background-color: beige;
+  color: darken(beige, 95%);
 }
 
 body {

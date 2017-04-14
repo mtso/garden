@@ -1,6 +1,7 @@
 import {
   WALK,
-} from '../config/action-type'
+  NEW_GAME,
+} from '../actions/action-type'
 import { generateDetailed } from '../utils/generate'
 import { TREASURE, POTION, WEAPON, FLOOR } from '../config'
 import Mob from '../models/Mob'
@@ -37,15 +38,17 @@ const generateFloor = (floor = 0, player = initialPlayer, isBossFloor = false) =
   if (isBossFloor) {
     data.boss = {
       position: data.exit,
-      health: player.exp,
-      attack: Math.floor(floor + 1 / 20) * Math.floor((player.exp + 1) / 200),
+      health: Math.floor(player.exp / 3),
+      attack: Math.floor((floor + 1) / 2) * Math.floor((player.exp + 1) / 33),
+      // attack: Math.floor(floor + 1 / 20) * Math.floor((player.exp + 1) / 200),
     }
   }
   // console.log(data)
   return Object.assign({}, data, {
     floor: floor + 1,
     player,
-    isBossFloor,
+    isBossFloor: true,
+    isGameOver: false,
   })
 }
 
@@ -64,9 +67,12 @@ let initialState = generateFloor()
 
 const mapReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'START':
+    case NEW_GAME:
       return generateFloor()
     case WALK:
+      if (state.isGameOver) {
+        return state
+      }
       let player = state.player
       let nextPos = {
         x: player.position.x + action.direction.x,
@@ -136,6 +142,9 @@ const mapReducer = (state = initialState, action) => {
           mob.isEngaged = true
           if (mob.health <= 0) {
             mob.isAlive = false
+            player.exp += 10
+            player.health += 1
+            player.attack += 1
           } else {
             player.health -= mob.attack
           }
@@ -143,8 +152,7 @@ const mapReducer = (state = initialState, action) => {
 
         if (player.health <= 0) {
           // GAME OVER
-          // isGameOver = true
-          throw new Error('GAME OVER')
+          state.isGameOver = true
         }
 
         state.mobs.forEach(m => {

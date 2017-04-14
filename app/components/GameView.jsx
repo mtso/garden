@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { char, FIELD_OF_VIEW } from '../config'
+import { newGameAction } from '../actions/new-game'
 
 function pad(string, count, char) {
   count = count || string.length
@@ -31,7 +32,7 @@ function isEqual(a, b) {
   return a.x === b.x && a.y === b.y
 }
 
-function render(grid, width, isOnExit) {
+function render(grid, width, isOnExit, isBossFloor) {
   let padding = Math.floor( (width - grid.length) / 2 )
   let leftPad = pad('', padding / 2, ' ')
   let vertPad = pad('', padding / 2, '\n')
@@ -47,7 +48,7 @@ function render(grid, width, isOnExit) {
   }).join('\n') + vertPad
 }
 
-function drawView(data, position, fov) {
+function drawView(data, position, fov, isBossFloor) {
   let size = fov * 2 - 1
   let radius = fov - 1
   let center = point(radius, radius)
@@ -85,8 +86,7 @@ function drawView(data, position, fov) {
       } else if (mobMap[k] && mobMap[k].isAlive) {
         value = charForType(mobMap[k].type)
       } else if (k === tileKey(data.exit)) {
-        value = charForType('EXIT')[1]
-        // or charForType('BOSS')[1]
+        value = isBossFloor ? charForType('BOSS')[1] : charForType('EXIT')[1]
       }
 
       row.push(value)
@@ -103,11 +103,16 @@ class GameView extends Component {
   }
   render() {
     let pos = this.props.position
-    let view = drawView(this.props.data, pos, FIELD_OF_VIEW)
-    let rendered = render(view, this.props.width, isEqual(pos, this.props.data.exit))
-    let style = this.props.isBossFloor ? 'boss-floor' : 'floor'
+    let view = drawView(this.props.data, pos, FIELD_OF_VIEW, this.props.isBossFloor)
+    let rendered = render(view, this.props.width, isEqual(pos, this.props.data.exit, this.props.isBossFloor))
+
+    if (this.props.isGameOver) {
+      let leftPad = pad('', 20, ' ')
+      let vertPad = pad('', 14, '\n')
+      rendered = <span>{vertPad}{leftPad}<a href='#' onClick={this.props.newGame}>Fin.</a>{vertPad}</span>
+    }
     return(
-      <pre className={style}>{rendered}</pre>
+      <pre>{rendered}</pre>
     )
   }
 }
@@ -120,13 +125,17 @@ const mapStateToProps = (state) => {
     data: state,
     width: state.width || 41,
     isBossFloor: state.isBossFloor,
+    isGameOver: state.isGameOver,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    newGame: () => dispatch(newGameAction()),
   }
 }
 
 export const ConnectedGameView = connect(
   mapStateToProps,
-  null
+  mapDispatchToProps,
 )(GameView)
-
-// export const ConnectedGameView
-// export const GameView
