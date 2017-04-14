@@ -4,6 +4,7 @@ import Scene from './components/Scene';
 import StatusBar from './components/StatusBar'
 import { ConnectedGameView } from './components/GameView'
 import { ConnectedStatusBar } from './components/StatusBar'
+import Swipeable from 'react-swipeable'
 
 const DOWN = 40
 const LEFT = 37
@@ -81,13 +82,20 @@ class App extends Component {
     // <pre>                                         </pre>
     let style = this.props.isBossFloor ? 'boss-floor' : 'floor'
     return (
-      <div tabIndex='0' onKeyDown={this.move} style={{textAlign: 'center'}} className={style + ' container'}>
-        <div style={{display: 'inline-block', textAlign: 'left'}}>
-          <pre>                                           </pre>
-          <ConnectedGameView />
-          <ConnectedStatusBar />
+      <Swipeable
+        onSwipedUp={this.props.walkNorth}
+        onSwipedDown={this.props.walkSouth}
+        onSwipedRight={this.props.walkEast}
+        onSwipedLeft={this.props.walkWest}
+      >
+        <div tabIndex='0' onKeyDown={this.move} style={{textAlign: 'center'}} className={style + ' container'}>
+          <div style={{display: 'inline-block', textAlign: 'left'}}>
+            <pre>                                           </pre>
+            <ConnectedGameView />
+            <ConnectedStatusBar />
+          </div>
         </div>
-      </div>
+      </Swipeable>
     )
   }
 }
