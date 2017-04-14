@@ -107,9 +107,13 @@ class GameView extends Component {
     let rendered = render(view, this.props.width, isEqual(pos, this.props.data.exit, this.props.isBossFloor))
 
     if (this.props.isGameOver) {
-      let leftPad = pad('', 20, ' ')
+      // console.log(this.props.data.player)
+      let isWin = this.props.data.player.health > 0
+      let leftPadCount = isWin ? 20 : 16
+      let leftPad = pad('', leftPadCount, ' ')
       let vertPad = pad('', 14, '\n')
-      rendered = <span>{vertPad}{leftPad}<a href='#' onClick={this.props.newGame}>Fin.</a>{vertPad}</span>
+      let message = isWin ? 'Fin.' : 'Game Over.'
+      rendered = <span>{vertPad}{leftPad}<a href='#' onClick={this.props.newGame}>{message}</a>{vertPad}</span>
     }
     return(
       <pre>{rendered}</pre>

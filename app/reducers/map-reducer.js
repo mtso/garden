@@ -35,19 +35,19 @@ const generateFloor = (floor = 0, player = initialPlayer, isBossFloor = false) =
     m.isEngaged = false
     return m
   })
+
   if (isBossFloor) {
     data.boss = {
       position: data.exit,
       health: Math.floor(player.exp / 3),
       attack: Math.floor((floor + 1) / 2) * Math.floor((player.exp + 1) / 33),
-      // attack: Math.floor(floor + 1 / 20) * Math.floor((player.exp + 1) / 200),
     }
   }
-  // console.log(data)
+
   return Object.assign({}, data, {
     floor: floor + 1,
     player,
-    isBossFloor: true,
+    isBossFloor,
     isGameOver: false,
   })
 }
@@ -135,7 +135,26 @@ const mapReducer = (state = initialState, action) => {
         }, {})
         // console.log(mobMap)
         if (!mobMap[nextKey]) {
-          player = playerReducer(player, action)
+          if (
+            state.isBossFloor &&
+            nextPos.x === state.boss.position.x &&
+            nextPos.y === state.boss.position.y
+          ) {
+            state.boss.health -= player.attack
+            if (state.boss.health <= 0) {
+              state.isGameOver = true
+            } else {
+              player.health -= state.boss.attack
+              if (player.health <= 0) {
+                state.isGameOver = true
+              }
+            }
+            console.log(state.boss, state.player)
+
+          } else {
+            player = playerReducer(player, action)
+          }
+
         } else {
           let mob = mobMap[nextKey]
           mob.health -= player.attack
@@ -146,7 +165,7 @@ const mapReducer = (state = initialState, action) => {
             player.health += 1
             player.attack += 1
           } else {
-            player.health -= mob.attack
+            player.health -= mob.attack + Math.floor(Math.random() * 3 - 1)
           }
         }
 
@@ -201,15 +220,14 @@ const mapReducer = (state = initialState, action) => {
           return m
         })
 
-        let nextState = Object.assign({}, state, {
+        player.health = Math.max(player.health, 0)
+
+        return Object.assign({}, state, {
           player,
           objects,
           objectMap,
           mobs: newMobs,
         })
-        console.log(state.player)
-        console.log(nextState.player)
-        return nextState
       }
     default:
       return state

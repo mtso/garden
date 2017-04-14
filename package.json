@@ -25,6 +25,7 @@
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
     "react-redux": "^5.0.4",
+    "react-swipeable": "^3.9.2",
     "redux": "^3.6.0",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
