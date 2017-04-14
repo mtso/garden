@@ -25,7 +25,7 @@ function generateRooms(count, mapSize) {
       } while (touches(rooms, room))
       rooms.push(room)
     } catch (err) {
-      console.error(err)
+      // console.error(err)
     }
   }
   return rooms;
