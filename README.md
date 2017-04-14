@@ -43,7 +43,3 @@ Rogue-like garden stroller.
 1. When I fight an enemy, we take turns damaging each other until one of us loses. I do damage based off of my level and my weapon. The enemy does damage based off of its level. Damage is somewhat random within a range.
 1. When I find and beat the boss, I win.
 1. The game should be challenging, but theoretically winnable.
-
-## Known Issues
-
-- When a mob is generated on top of the exit, the mob is displayed, (but mob should be placed elsewhere)
