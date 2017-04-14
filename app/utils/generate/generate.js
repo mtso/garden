@@ -223,16 +223,16 @@ function generateDetailed(size, roomCount, make) {
     }
   })
 
-  let mobs = enemies.map(function(pos) {
-    return new Mob(pos, 1, 1)
-  })
+  // let mobs = enemies.map(function(pos) {
+  //   return new Mob(pos, 1, 1)
+  // })
 
   // grid.statues = st
 
   // let allTiles = roomTiles.concat(hallTiles)
   return {
     map: floorMap,
-    mobs,
+    mobs: enemies,
     objects: treasure.concat(items),
     exit,
     spawn,
