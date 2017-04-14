@@ -5,7 +5,6 @@ Rogue-like garden stroller.
 ## Buffer Shot
 ```
 
-                                  ❧ I seem to have lost my way ☙
 
 
 
@@ -28,8 +27,9 @@ Rogue-like garden stroller.
 
 
 
-                                        (1)  ♣23  ♥12  ♠4
-
+                                          ♣23  ♥12  ♠4
+ 
+ 
 ```
 
 ## User Stories
