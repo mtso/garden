@@ -90,7 +90,7 @@ const mapReducer = (state = initialState, action) => {
         let item = state.objectMap[nextKey]
         let objectMap = state.objectMap
         let objects = state.objects
-        if (item) {
+        if (item && !item.isPickedUp) {
           switch (item.type) {
             case TREASURE:
               player.attack = Math.max(1, player.attack + Math.floor(Math.random() * 12) - 3)
@@ -113,7 +113,7 @@ const mapReducer = (state = initialState, action) => {
           item.isPickedUp = true
           objectMap = Object.assign(
             {}, state.objectMap, {
-              nextKey: item
+              [nextKey]: item
             }
           )
           objects = objects.map(o => {

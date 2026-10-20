@@ -4,7 +4,7 @@
   "description": "roguelike garden crawler.",
   "main": "app/index.js",
   "scripts": {
-    "test": "echo 'not implemented'",
+    "test": "node test/item-pickup.js",
     "build": "webpack",
     "dist": "webpack -p",
     "start": "webpack-dev-server"
