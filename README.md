@@ -2,6 +2,17 @@
 
 Rogue-like garden stroller.
 
+## Local build
+
+With Node.js 20.19 or newer, run `npm install` and `npm run build`, then open
+`dist/index.html` directly in your browser. The build uses relative asset paths
+and works with `file://`; no server is required. Run `npm test` for regression tests.
+
+Background art is bundled in `app/assets/backgrounds.json` and chosen once per
+floor. It moves with the map and stays inside the player's field of view.
+Set `BACKGROUND_COLOR` and `BOSS_BACKGROUND_COLOR` in `app/config.js` to change
+its character color on black and boss floors, respectively.
+
 ## Buffer Shot
 ```
 

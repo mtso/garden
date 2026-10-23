@@ -1,5 +1,7 @@
 const EFFORT = 50;
 const FIELD_OF_VIEW = 8;
+const BACKGROUND_COLOR = '#403f3c'
+const BOSS_BACKGROUND_COLOR = '#ccccc4'
 
 const FLOOR = 'FLOOR'
 const WALL = 'WALL'
@@ -37,5 +39,7 @@ module.exports = {
   PLAYER,
   MOB,
   FIELD_OF_VIEW,
+  BACKGROUND_COLOR,
+  BOSS_BACKGROUND_COLOR,
   char,
 }

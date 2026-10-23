@@ -3,8 +3,9 @@ import {
   NEW_GAME,
 } from '../actions/action-type'
 import { generateDetailed } from '../utils/generate'
-import { TREASURE, POTION, WEAPON, FLOOR } from '../config'
-import Mob from '../models/Mob'
+import { createBackground } from '../utils/background'
+import { TREASURE, POTION, WEAPON, FLOOR, BACKGROUND_COLOR, BOSS_BACKGROUND_COLOR } from '../config'
+import Mob from '../models/mob'
 
 let initialPlayer = {
   exp: 0,
@@ -49,6 +50,7 @@ const generateFloor = (floor = 0, player = initialPlayer, isBossFloor = false) =
     player,
     isBossFloor,
     isGameOver: false,
+    background: createBackground(size, Math.random, isBossFloor ? BOSS_BACKGROUND_COLOR : BACKGROUND_COLOR),
   })
 }
 

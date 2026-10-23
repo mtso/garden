@@ -17,6 +17,7 @@ const context = Object.assign({}, config, actions, {
     mobs: [], objects: [], spawn: { x: 0, y: 0 }, exit: { x: 9, y: 9 },
   }),
   Mob: require('../app/models/mob'),
+  createBackground: require('../app/utils/background').createBackground,
 })
 vm.runInNewContext(source, context)
 const reducer = context.reducer
@@ -99,6 +100,74 @@ cases.forEach(({ type, reward }) => {
     const state = walk(fixture(type), 1)
     assert.deepStrictEqual(Object.keys(state.objectMap).sort(), ['1:0', '2:0'])
   })
+})
+
+test('initial floor owns a centered background', () => {
+  const initial = reducer(undefined, { type: '@@INIT' })
+  assert.strictEqual(initial.background.id, 'stego')
+  assert.deepStrictEqual(initial.background.origin, { x: -1, y: 8 })
+  assert.strictEqual(initial.background.color, '#403f3c')
+})
+
+test('walking and blocked movement preserve the floor background', () => {
+  const state = fixture(config.POTION, true)
+  state.background = context.createBackground(30, () => 0)
+  const snapshot = JSON.stringify(state.background)
+  const moved = walk(state, 1)
+  assert.strictEqual(moved.background, state.background)
+  const blocked = reducer(moved, {
+    type: actions.WALK, direction: { x: 0, y: 1 },
+  })
+  assert.strictEqual(blocked.background, state.background)
+  assert.strictEqual(JSON.stringify(blocked.background), snapshot)
+})
+
+test('new game resets the boss background to the black theme', () => {
+  const state = fixture(config.POTION, true)
+  state.background = context.createBackground(30, () => 0)
+  state.background.color = '#ccccc4'
+  state.isBossFloor = true
+  const restarted = reducer(state, { type: actions.NEW_GAME })
+  assert.notStrictEqual(restarted.background, state.background)
+  assert.strictEqual(restarted.background.id, 'stego')
+  assert.strictEqual(restarted.background.color, '#403f3c')
+  assert.strictEqual(restarted.isBossFloor, false)
+  assert.strictEqual(restarted.floor, 1)
+})
+
+;[0, 150].forEach(exp => {
+  test('exit generates a background with player exp=' + exp, () => {
+    const state = fixture(config.POTION, true)
+    state.floor = 1
+    state.player.exp = exp
+    state.background = context.createBackground(30, () => 0)
+    state.exit = { x: 1, y: 0 }
+    const advanced = reducer(state, {
+      type: actions.WALK, direction: { x: 1, y: 0 },
+    })
+    assert.strictEqual(advanced.floor, 2)
+    assert.strictEqual(advanced.isBossFloor, exp === 150)
+    assert.notStrictEqual(advanced.background, state.background)
+    assert.strictEqual(advanced.background.id, 'stego')
+    assert.strictEqual(advanced.background.color, exp === 150 ? '#ccccc4' : '#403f3c')
+    assert.deepStrictEqual(advanced.background.origin, { x: -1, y: 8 })
+  })
+})
+
+test('combat preserves the floor background and its origin', () => {
+  const state = fixture(config.POTION, true)
+  state.background = context.createBackground(30, () => 0.4)
+  const snapshot = JSON.stringify(state.background)
+  const origin = state.background.origin
+  state.mobs = [{ position: { x: 1, y: 0 }, health: 10, attack: 1, isAlive: true }]
+  const fought = reducer(state, {
+    type: actions.WALK, direction: { x: 1, y: 0 },
+  })
+  assert.strictEqual(fought.mobs[0].health, 9)
+  assert.strictEqual(fought.player.position.x, 0)
+  assert.strictEqual(fought.background, state.background)
+  assert.strictEqual(fought.background.origin, origin)
+  assert.strictEqual(JSON.stringify(fought.background), snapshot)
 })
 
 console.log(passed + ' passed, ' + failures + ' failed')

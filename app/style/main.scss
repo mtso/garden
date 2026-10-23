@@ -1,4 +1,5 @@
-@import 'variables';
+@use 'sass:color';
+@use 'variables' as *;
 
 html, body {
   height: 100%;
@@ -6,6 +7,15 @@ html, body {
 
 .cell {
   font-family: $mono-font;
+}
+
+.background-character {
+  display: inline-block;
+  width: 1ch;
+  height: 1em;
+  line-height: 1;
+  text-align: center;
+  vertical-align: text-bottom;
 }
 
 .boss-floor {
@@ -44,13 +54,13 @@ div {
 }
 
 .container.boss-floor  {
-  background-color: desaturate(beige, 40%);
-  color: darken(beige, 70%);
+  background-color: color.adjust(beige, $saturation: -40%);
+  color: color.adjust(beige, $lightness: -70%);
 }
 
 .container.boss-floor:focus  {
   background-color: beige;
-  color: darken(beige, 95%);
+  color: black;
 }
 
 body {
@@ -68,6 +78,6 @@ body {
 
   .container.boss-floor {
     background-color: beige;
-    color: darken(beige, 95%);
+    color: black;
   }
 }
